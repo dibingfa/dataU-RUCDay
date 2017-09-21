@@ -1,6 +1,7 @@
 package com.flash.dataU.test.controller;
 
 import com.flash.dataU.test.service.TestService;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class TestController {
      * @return
      */
     @RequestMapping("testController")
-    public String testController(){
+    public String testController(HttpServletRequest request){
         return "a Controller class visit succeed, " +
             "it means a connect 'browser-->Controller' build success";
     }

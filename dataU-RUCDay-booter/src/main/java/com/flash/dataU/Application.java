@@ -1,5 +1,6 @@
 package com.flash.dataU;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext;
@@ -30,7 +31,8 @@ public class Application {
      * @return
      */
     @RequestMapping("/test")
-    public String test(){
+    public String test(HttpServletRequest request){
+        request.setAttribute("name", "dear");
         return "test";
     }
 }
