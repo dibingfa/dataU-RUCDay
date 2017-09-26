@@ -1,20 +1,17 @@
 package com.flash.dataU.rucday.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.flash.dataU.rucday.bo.IndexResponseBO;
 import com.flash.dataU.rucday.bo.UserRegisterResponseBO;
 import com.flash.dataU.rucday.business.RucUserBusiness;
 import com.flash.dataU.rucday.entity.RucUserDO;
 import com.flash.dataU.rucday.service.RucUserService;
 import com.flash.dataU.rucday.util.CookieUtils;
-import java.util.ArrayList;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -26,10 +23,10 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private RucUserService rucUserService;
+    private RucUserBusiness rucUserBusiness;
 
     @Autowired
-    private RucUserBusiness rucUserBusiness;
+    private RucUserService rucUserService;
 
     /**
      * 跳转到入侵页面
@@ -37,13 +34,13 @@ public class UserController {
     @RequestMapping("break")
     public String leadToBreak(HttpServletRequest request) {
         // 检查是否带有用户信息的cookie
-        String userDOStr = CookieUtils.getCookie(request, CookieUtils.USER_COOKIE);
+        String userGuid = CookieUtils.getCookie(request, CookieUtils.USER_COOKIE);
         // 未注册用户跳转到注册页面
-        if (null == userDOStr) {
+        if (null == userGuid) {
             return "register";
         }
         //已注册用户跳转到登录页面
-        request.setAttribute("userinfo", JSONObject.parseObject(userDOStr, RucUserDO.class));
+        request.setAttribute("userinfo", rucUserService.findByUserGuid(userGuid));
         return "login";
     }
 
@@ -63,13 +60,11 @@ public class UserController {
             userDO = userRegisterResponseBO.getUserDO();
             indexResponseBOS = userRegisterResponseBO.getIndexResponseBOS();
             // 新用户需将信息放入cookie
-            String userDOStr = JSONObject.toJSONString(userDO);
-            CookieUtils.setCookie(response, CookieUtils.USER_COOKIE, userDOStr);
+            CookieUtils.setCookie(response, CookieUtils.USER_COOKIE, userDO.getUserGuid());
         } else {
             // 老用户从cookie中获取
-            String userDOStr = CookieUtils.getCookie(request, CookieUtils.USER_COOKIE);
-            userDO = JSONObject.parseObject(userDOStr, RucUserDO.class);
-            indexResponseBOS = rucUserBusiness.login(userDO);
+            String userGuid = CookieUtils.getCookie(request, CookieUtils.USER_COOKIE);
+            indexResponseBOS = rucUserBusiness.login(userGuid);
         }
         // 页面信息放入session
         request.getSession().setAttribute("indexGroupInfos", indexResponseBOS);

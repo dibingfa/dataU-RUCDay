@@ -9,14 +9,13 @@ import com.flash.dataU.rucday.service.RucGroupMessageService;
 import com.flash.dataU.rucday.service.RucGroupService;
 import com.flash.dataU.rucday.service.RucUserService;
 import com.flash.dataU.rucday.utils.RandomUtils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import com.flash.dataU.rucday.utils.UserIndexTransferUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import org.springframework.util.StringUtils;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/9/24.
@@ -42,7 +41,7 @@ public class RucUserBusiness {
         RucUserDO userDO = createUser(ip, name, sex, icon);
         userDO = rucUserService.save(userDO);
         // 注册完毕，直接登录
-        List<IndexResponseBO> indexResponseBOS = login(userDO);
+        List<IndexResponseBO> indexResponseBOS = login(userDO.getUserGuid());
         // 封装信息
         userRegisterResponseBO.setIndexResponseBOS(indexResponseBOS);
         userRegisterResponseBO.setUserDO(userDO);
@@ -52,7 +51,8 @@ public class RucUserBusiness {
     /**
      * 老用户登录
      */
-    public List<IndexResponseBO> login(RucUserDO userDO){
+    public List<IndexResponseBO> login(String userGuid){
+        RucUserDO userDO = rucUserService.findByUserGuid(userGuid);
         List<IndexResponseBO> indexResponseBOs = new ArrayList<IndexResponseBO>();
         // 查询出所有群聊框
         List<RucGroupDO> groupDOS = rucGroupService.findAll();
@@ -62,7 +62,7 @@ public class RucUserBusiness {
 
         // 取出用户最后一条阅读消息的索引
         String lastReadMsgIndexStr = userDO.getLastReadMsgIndex();
-        Map<String, Integer> lastReadMsgIndexMap = parseUserLastReadMsgIndex(lastReadMsgIndexStr);
+        Map<String, Integer> lastReadMsgIndexMap = UserIndexTransferUtils.parseUserLastReadMsgIndex(lastReadMsgIndexStr);
 
         // 遍历群聊框
         for (RucGroupDO groupDO:groupDOS) {
@@ -73,10 +73,12 @@ public class RucUserBusiness {
             long totalMsg = rucGroupMessageService.countAll(groupDO.getGroupGuid());
             indexResponseBO.setTotalMsg((int)totalMsg);
             // 封装未读条数信息
-            int index = lastReadMsgIndexMap.get(groupDO.getGroupGuid());
-            indexResponseBO.setUnreadMsg((int)(totalMsg - index));
+            int lastReadMsgIndex = lastReadMsgIndexMap.get(groupDO.getGroupGuid());
+            int readMsg = lastReadMsgIndex + 1;
+            indexResponseBO.setUnreadMsg((int)(totalMsg - readMsg));
             // 封装最后一条消息信息
-            RucGroupMessageDO lastGroupMessageDO = rucGroupMessageService.findByIndex(groupDO.getGroupGuid(), totalMsg);
+            long lastMsgIndex = totalMsg - 1;
+            RucGroupMessageDO lastGroupMessageDO = rucGroupMessageService.findByIndex(groupDO.getGroupGuid(), lastMsgIndex);
             indexResponseBO.setLastGroupMessageDO(lastGroupMessageDO);
 
             //添加至
@@ -102,30 +104,12 @@ public class RucUserBusiness {
         List<RucGroupDO> rucGroupDOS = rucGroupService.findAll();
         String[] lastReadMsgIndexs = new String[rucGroupDOS.size()];
         for (int i = 0; i < lastReadMsgIndexs.length; i++) {
-            lastReadMsgIndexs[i] = rucGroupDOS.get(i).getGroupGuid() + ":" + 0;
+            lastReadMsgIndexs[i] = rucGroupDOS.get(i).getGroupGuid() + ":" + "-1";
         }
         String lastReadMsgIndexStr = String.join(",", lastReadMsgIndexs);
         userDO.setLastReadMsgIndex(lastReadMsgIndexStr);
 
         return userDO;
-    }
-
-    /**
-     * 解析用户最后一条阅读消息的拼接字符串
-     */
-    private Map<String, Integer> parseUserLastReadMsgIndex(String lastReadMsgIndexStr) {
-        if (StringUtils.isEmpty(lastReadMsgIndexStr)) {
-            return new HashMap<String, Integer>(0);
-        }
-        String[] groupAndIndexs = lastReadMsgIndexStr.split(",");
-        Map<String, Integer> lastReadMsgIndexMap = new HashMap<String, Integer>(groupAndIndexs.length);
-        for (String groupAndIndex:groupAndIndexs) {
-            String[] split = groupAndIndex.split(":");
-            String groupGuid = split[0];
-            int index = Integer.parseInt(split[1]);
-            lastReadMsgIndexMap.put(groupGuid, index);
-        }
-        return lastReadMsgIndexMap;
     }
 
 }

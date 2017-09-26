@@ -39,23 +39,20 @@
     </script>
 </head>
 <body>
-<h1>首页</h1>
+<h1 th:text="${groupName}">首页</h1>
 <table>
     <tr>
-        <th>群名称</th>
-        <th>总消息数</th>
-        <th>未读消息数</th>
-        <th>最后一条消息</th>
+        <th>发送者</th>
+        <th>消息内容</th>
+        <th>时间</th>
     </tr>
-    <tr th:each="indexGroupInfo:${session.indexGroupInfos}">
-        <td>
-            <a th:href="@{'/group/'+${indexGroupInfo.groupDO.groupGuid}}" th:text="${indexGroupInfo.groupDO.name}"></a>
-        </td>
-        <td th:text="${indexGroupInfo.totalMsg}">总消息</td>
-        <td th:text="${indexGroupInfo.unreadMsg}">未读消息数</td>
-        <td th:text="${indexGroupInfo.lastGroupMessageDO.content}">最后一条消息</td>
+    <tr th:each="groupMessage:${groupMessages}">
+        <td th:text="${groupMessage.fromGuid}"></td>
+        <td th:text="${groupMessage.content}"></td>
+        <td th:text="${groupMessage.createTime}"></td>
     </tr>
 </table>
+<input type="text"/><input type="submit" value="发送">
 
 </body>
 </html>

@@ -14,6 +14,7 @@ public class RucGroupMessageDO extends BaseDO{
     private String toGuid;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "group_message_id")
     public long getGroupMessageId() {
         return groupMessageId;

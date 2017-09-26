@@ -15,6 +15,7 @@ public class RucGroupDO extends BaseDO{
     private String intro;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "group_id")
     public long getGroupId() {
         return groupId;

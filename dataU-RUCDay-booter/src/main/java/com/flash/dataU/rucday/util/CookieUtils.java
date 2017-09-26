@@ -1,9 +1,10 @@
 package com.flash.dataU.rucday.util;
 
+import org.springframework.util.StringUtils;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.util.StringUtils;
 
 /**
  * .
@@ -37,7 +38,7 @@ public class CookieUtils {
         for (Cookie cookie:cookies) {
             if (name.equals(cookie.getName())) {
                 String value = cookie.getValue();
-                value = decodeCookie(value);
+                //value = decodeCookie(value);
                 return value;
             }
         }
@@ -48,8 +49,9 @@ public class CookieUtils {
      * 设置cookie
      */
     public static void setCookie(HttpServletResponse response, String name, String value) {
-        value = encodeCookie(value);
+        //value = encodeCookie(value);
         Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
         response.addCookie(cookie);
     }
 

@@ -17,6 +17,7 @@ public class RucUserDO extends BaseDO{
     private String lastReadMsgIndex;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     public long getUserId() {
         return userId;

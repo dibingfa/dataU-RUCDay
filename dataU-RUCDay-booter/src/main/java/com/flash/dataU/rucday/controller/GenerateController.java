@@ -1,20 +1,17 @@
 package com.flash.dataU.rucday.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.flash.dataU.rucday.entity.RucGroupDO;
 import com.flash.dataU.rucday.entity.RucGroupMessageDO;
 import com.flash.dataU.rucday.entity.RucUserDO;
 import com.flash.dataU.rucday.service.RucGroupMessageService;
 import com.flash.dataU.rucday.service.RucGroupService;
 import com.flash.dataU.rucday.service.RucUserService;
-import com.flash.dataU.rucday.util.CookieUtils;
 import com.flash.dataU.rucday.utils.RandomUtils;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * .
@@ -57,11 +54,9 @@ public class GenerateController {
     public String groupMsg(String from, String to) {
         List<RucGroupDO> rucGroupDOS = rucGroupService.findAll();
         List<RucUserDO> rucUserDOs = rucUserService.findAll();
-        RucGroupMessageDO groupMessageDO = null;
         for (RucUserDO userDO:rucUserDOs) {
             for (RucGroupDO groupDO:rucGroupDOS) {
-                groupMessageDO = null;
-                groupMessageDO = new RucGroupMessageDO();
+                RucGroupMessageDO groupMessageDO = new RucGroupMessageDO();
                 groupMessageDO.setContent("你好啊小屁孩"+RandomUtils.generateUUID().substring(1,5));
                 groupMessageDO.setFromGuid(userDO.getUserGuid());
                 groupMessageDO.setToGuid(groupDO.getGroupGuid());

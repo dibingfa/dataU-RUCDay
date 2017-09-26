@@ -7,6 +7,7 @@ import com.flash.dataU.rucday.redis.RedisOpsUtil;
 import com.flash.dataU.rucday.repository.RucGroupMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,7 @@ public class RucGroupMessageService {
     /**
      * 存储群聊消息
      */
+    @Transactional
     public RucGroupMessageDO save(RucGroupMessageDO groupMessageDO) {
         // 存储到数据库
         groupMessageDO.setCreateTime(System.currentTimeMillis());
