@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test For DataU</title>
+    <script type="text/javascript" src="/js/jquery-1.11.3.js"></script>
+    <script>
+
+        /**
+         * drag a div
+         */
+        window.onload=function(){
+            var oDiv=document.getElementById('div');
+            var distX=0;
+            var distY=0;
+            oDiv.onmousedown=function(ev){
+                var oEvent=ev||event;
+                distX=oEvent.clientX-oDiv.offsetLeft;   //获取边界到鼠标的距离
+                distY=oEvent.clientY-oDiv.offsetTop;
+                document.onmousemove=function(ev){
+                    var oEvent=ev||event;
+                    var x=oEvent.clientX-distX;
+                    var y=oEvent.clientY-distY;
+                    if(x<0){
+                        x=0;
+                    }
+                    if(y<0){
+                        y=0;
+                    }
+                    if(x>(document.documentElement.clientWidth-oDiv.offsetWidth))
+                    {
+                        x=document.documentElement.clientWidth-oDiv.offsetWidth;
+                    }
+                    oDiv.style.left=x+'px';    //根据鼠标位置相对定位，得到left，top值
+                    oDiv.style.top=y+'px';
+                }
+                document.onmouseup=function(){
+                    document.onmousemove=null;
+                    document.onmouseup=null;
+                }
+            }
+
+        }
+
+        /**
+         * get root path, like "http://192.168.11.91", without a "/" in the end
+         */
+        var path = getRootPath();
+        function getRootPath() {
+            var strFullPath = window.document.location.href;
+            var strPath = window.document.location.pathname;
+            var pos = strFullPath.indexOf(strPath);
+            var prePath = strFullPath.substring(0, pos);
+            var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
+            return (prePath + postPath);
+        }
+
+        /**
+         * test for Controller Class visit
+         */
+        function testController() {
+            $.ajax({
+                type: "POST",
+                url: path + "/testController",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for Service Class visit
+         */
+        function testService() {
+            $.ajax({
+                type: "POST",
+                url: path + "/testService",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for Dao Class visit
+         */
+        function testDao() {
+            $.ajax({
+                type: "POST",
+                url: path + "/testDao",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for Redis Class visit
+         */
+        function testRedis() {
+            $.ajax({
+                type: "POST",
+                url: path + "/testRedis",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for json type return
+         */
+        function jsonTest() {
+            $.ajax({
+                type: "POST",
+                url: path + "/jsonTest",
+                dataType: "text",
+                success: function (msg) {
+                    var data = eval('(' + msg + ')');
+                    alert(data.msg);
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<h1>Test For DataU</h1>
+<p>In this page, you can test whatever you want, I have already made some basic test cases,
+    these cases can help you test if the project access from browser to database
+</p>
+    <button onclick="testController()">testController</button>
+    <button onclick="testService()">testService</button>
+    <button onclick="testDao()">testDao</button>
+    <button onclick="testRedis()">testRedis</button>
+    <button onclick="getRootPath()">getRootPath</button>
+</p>
+<h3>result</h3>
+<div id="msg" style="width: 500px;height: 60px; border: 1px solid black;"></div>
+<br>
+<div id="div" style="width: 90px;height: 25px; border: 1px solid black; position: absolute; background-color: coral">Draggable</div>
+</body>
+</html>

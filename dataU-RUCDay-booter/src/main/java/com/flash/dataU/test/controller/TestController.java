@@ -50,13 +50,4 @@ public class TestController {
         return testService.testDao();
     }
 
-    /**
-     * this method is only for Controller-Service-Dao test
-     * visit "http://localhost:8080/testRedis" after running, you can get a message
-     * @return
-     */
-    @RequestMapping("testRedis")
-    public String testRedis(){
-        return testService.testRedis();
-    }
 }

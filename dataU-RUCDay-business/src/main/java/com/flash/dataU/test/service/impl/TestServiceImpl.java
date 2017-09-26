@@ -1,12 +1,10 @@
 package com.flash.dataU.test.service.impl;
 
-import com.flash.dataU.test.entity.CityEntity;
-import com.flash.dataU.test.repository.TestRepository;
-import com.flash.dataU.test.service.TestRedis;
+import com.flash.dataU.rucday.entity.RucUserDO;
+import com.flash.dataU.rucday.service.RucUserService;
 import com.flash.dataU.test.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.util.resources.cldr.en.TimeZoneNames_en_PK;
 
 /**
  * Service Test.
@@ -18,10 +16,7 @@ import sun.util.resources.cldr.en.TimeZoneNames_en_PK;
 public class TestServiceImpl implements TestService{
 
     @Autowired
-    private TestRepository testRepository;
-
-    @Autowired
-    private TestRedis testRedis;
+    private RucUserService rucUserService;
 
     /**
      * this method is only for Controller-Service test
@@ -37,30 +32,11 @@ public class TestServiceImpl implements TestService{
      * @return
      */
     public String testDao() {
-        return timePK(testRepository);
-    }
-
-    /**
-     * this method is only for Controller-Service-Dao test
-     * @return
-     */
-    public String testRedis() {
-        return timePK(testRedis);
-    }
-
-    private String timePK(Object testDao){
-        String name = "Chitungwiza";
-        CityEntity cityEntity = null;
-        long start = System.currentTimeMillis();
-        for (int i = 0; i<1000;i++) {
-            if (testDao instanceof TestRedis) {
-                cityEntity = testRedis.findByName(name);
-            } else {
-                cityEntity = testRepository.findByName(name);
-            }
+        RucUserDO userDO = rucUserService.findByUserGuid("12345");
+        if (null == userDO) {
+            return "未查到数据";
         }
-        long end = System.currentTimeMillis();
-        long time = end - start;
-        return name + " --- " + cityEntity.getPopulation() + " people, usetime:"+ time;
+        return userDO.toString();
     }
+
 }

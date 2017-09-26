@@ -9,5 +9,4 @@ package com.flash.dataU.test.service;
 public interface TestService {
     String testService();
     String testDao();
-    String testRedis();
 }
