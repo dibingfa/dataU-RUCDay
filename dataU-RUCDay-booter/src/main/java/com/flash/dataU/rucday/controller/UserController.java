@@ -6,6 +6,7 @@ import com.flash.dataU.rucday.business.RucUserBusiness;
 import com.flash.dataU.rucday.entity.RucUserDO;
 import com.flash.dataU.rucday.service.RucUserService;
 import com.flash.dataU.rucday.util.CookieUtils;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by Administrator on 2017/9/23.
@@ -40,7 +42,7 @@ public class UserController {
             return "register";
         }
         //已注册用户跳转到登录页面
-        request.setAttribute("userinfo", rucUserService.findByUserGuid(userGuid));
+        request.getSession().setAttribute("userinfo", rucUserService.findByUserGuid(userGuid));
         return "login";
     }
 
@@ -61,15 +63,49 @@ public class UserController {
             indexResponseBOS = userRegisterResponseBO.getIndexResponseBOS();
             // 新用户需将信息放入cookie
             CookieUtils.setCookie(response, CookieUtils.USER_COOKIE, userDO.getUserGuid());
+            request.getSession().setAttribute("userinfo", userDO);
         } else {
             // 老用户从cookie中获取
             String userGuid = CookieUtils.getCookie(request, CookieUtils.USER_COOKIE);
             indexResponseBOS = rucUserBusiness.login(userGuid);
+            request.getSession().setAttribute("userinfo", rucUserService.findByUserGuid(userGuid));
         }
         // 页面信息放入session
         request.getSession().setAttribute("indexGroupInfos", indexResponseBOS);
 
         return "index";
+    }
+
+
+    /**
+     * 刷新首页群聊框
+     */
+    @ResponseBody
+    @RequestMapping("refreshIndexGroup")
+    public List<IndexResponseBO> refreshIndexGroup(HttpServletRequest request) throws InterruptedException {
+        Thread.sleep(500L);
+        long start = System.currentTimeMillis();
+
+        while (true) {
+            // 尝试获取最新数据
+            RucUserDO userDO = (RucUserDO)request.getSession().getAttribute("userinfo");
+            List<IndexResponseBO> indexResponseBOS = (List<IndexResponseBO>)request.getSession().getAttribute("indexGroupInfos");
+            indexResponseBOS = rucUserBusiness.refreshIndex(userDO, indexResponseBOS);
+            if (indexResponseBOS != null && indexResponseBOS.size()!=0) {
+                // 有数据更新
+                request.getSession().setAttribute("indexGroupInfos", indexResponseBOS);
+                request.getSession().setAttribute("userinfo", userDO);
+                return indexResponseBOS;
+            }
+
+            Thread.sleep(1000L);
+            // 4.5秒就结束掉
+            long now = System.currentTimeMillis();
+
+            if (now - start > 7000) {
+                return new ArrayList<IndexResponseBO>();
+            }
+        }
     }
 
 

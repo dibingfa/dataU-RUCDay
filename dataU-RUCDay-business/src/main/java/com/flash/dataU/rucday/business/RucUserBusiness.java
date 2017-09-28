@@ -10,6 +10,7 @@ import com.flash.dataU.rucday.service.RucGroupService;
 import com.flash.dataU.rucday.service.RucUserService;
 import com.flash.dataU.rucday.utils.RandomUtils;
 import com.flash.dataU.rucday.utils.UserIndexTransferUtils;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,12 +61,60 @@ public class RucUserBusiness {
             return indexResponseBOs;
         }
 
+        packageIndexResponseBOs(indexResponseBOs, userDO, groupDOS);
+
+        return indexResponseBOs;
+    }
+
+
+    /**
+     * 刷新主页
+     */
+    public List<IndexResponseBO> refreshIndex(RucUserDO userDO, List<IndexResponseBO> indexResponseBOs){
+
+        RucUserDO dataUserDO = rucUserService.findByUserGuid(userDO.getUserGuid());
+        userDO = dataUserDO;
+
+        // 查询从数据库获取的首页数据
+        List<IndexResponseBO> dataIndexResponseBOs = new ArrayList<IndexResponseBO>();
+        List<RucGroupDO> groupDOS = rucGroupService.findAll();
+        if (groupDOS == null || groupDOS.size() == 0) {
+            return dataIndexResponseBOs;
+        }
+        packageIndexResponseBOs(dataIndexResponseBOs, userDO, groupDOS);
+
+        // 数据库中的和现有的进行比较
+
+        System.out.println("------------------现有的---------------");
+        for (IndexResponseBO indexResponseBO:indexResponseBOs) {
+            System.out.println(indexResponseBO);
+        }
+        System.out.println("------------------数据库的---------------");
+        for (IndexResponseBO dataIndexResponseBO:dataIndexResponseBOs) {
+            System.out.println(dataIndexResponseBO);
+        }
+
+        if (!indexResponseBOs.equals(dataIndexResponseBOs)) {
+            //不相等说明有变动
+            indexResponseBOs = dataIndexResponseBOs;
+            return indexResponseBOs;
+        }
+
+        return new ArrayList<IndexResponseBO>();
+
+    }
+
+    /**
+     * 封装首页参数
+     */
+    private void packageIndexResponseBOs(List<IndexResponseBO> indexResponseBOs, RucUserDO userDO, List<RucGroupDO> groupDOs) {
+
         // 取出用户最后一条阅读消息的索引
         String lastReadMsgIndexStr = userDO.getLastReadMsgIndex();
         Map<String, Integer> lastReadMsgIndexMap = UserIndexTransferUtils.parseUserLastReadMsgIndex(lastReadMsgIndexStr);
 
         // 遍历群聊框
-        for (RucGroupDO groupDO:groupDOS) {
+        for (RucGroupDO groupDO:groupDOs) {
             IndexResponseBO indexResponseBO = new IndexResponseBO();
             // 封装group对象
             indexResponseBO.setGroupDO(groupDO);
@@ -84,9 +133,10 @@ public class RucUserBusiness {
             //添加至
             indexResponseBOs.add(indexResponseBO);
         }
-
-        return indexResponseBOs;
     }
+
+
+
 
     /**
      * 新用户生成
