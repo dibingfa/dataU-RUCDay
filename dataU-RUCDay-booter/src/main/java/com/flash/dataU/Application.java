@@ -1,13 +1,11 @@
 package com.flash.dataU;
 
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * dataU start Class.
@@ -34,5 +32,10 @@ public class Application {
     public String test(HttpServletRequest request){
         request.setAttribute("name", "dear");
         return "test";
+    }
+
+    @RequestMapping("/generate")
+    public String generate(){
+        return "generate";
     }
 }

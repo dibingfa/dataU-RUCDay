@@ -1,16 +1,16 @@
 package com.flash.dataU.rucday.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.flash.dataU.rucday.entity.RucGroupDO;
 import com.flash.dataU.rucday.entity.RucUserDO;
 import com.flash.dataU.rucday.redis.RedisKeyUtil;
 import com.flash.dataU.rucday.redis.RedisOpsUtil;
 import com.flash.dataU.rucday.repository.RucUserRepository;
 import com.mysql.jdbc.StringUtils;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/9/23.
@@ -114,6 +114,13 @@ public class RucUserService {
         redisOpsUtil.set(RedisKeyUtil.getFullKey(TABLE, NAME, userDO.getName()), userDOStr);
 
         return userDO;
+    }
+
+    /**
+     * 清空数据库
+     */
+    public void deleteAll() {
+        rucUserRepository.deleteAll();
     }
 
 

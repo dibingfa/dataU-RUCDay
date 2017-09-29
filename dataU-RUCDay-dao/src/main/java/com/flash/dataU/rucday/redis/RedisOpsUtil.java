@@ -106,4 +106,11 @@ public class RedisOpsUtil {
 		return valOpsStr.getOperations().boundListOps(key).size();
 	}
 
+	/**
+	 * 清空
+	 */
+	public void unwatch(){
+		valOpsStr.getOperations().unwatch();
+	}
+
 }

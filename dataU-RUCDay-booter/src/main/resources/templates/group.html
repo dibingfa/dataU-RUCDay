@@ -82,6 +82,12 @@
          */
         function sendMsg() {
             var form = new FormData($("#message")[0]);
+            // 写入聊天
+            var content = $("#content").val();
+            var username = $("#username").val();
+            $("#msgBlock").append("<tr><td>"+username+"</td><td>"+content+"</td><td></td></tr>");
+            //清除聊天框内容
+            $("#content").val("");
             $.ajax({
                 type: "POST",
                 url: path + "/sendMsg",
@@ -89,10 +95,6 @@
                 contentType: false,
                 processData: false,
                 success: function (msg) {
-                    // 写入聊天
-                    var content = $("#content").val();
-                    var username = $("#username").val();
-                    $("#msgBlock").append("<tr><td>"+username+"</td><td>"+content+"</td><td></td></tr>");
                 }
             });
         }

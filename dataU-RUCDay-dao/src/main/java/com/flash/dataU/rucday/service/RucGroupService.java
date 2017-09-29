@@ -75,6 +75,13 @@ public class RucGroupService {
     }
 
     /**
+     * 清空数据库
+     */
+    public void deleteAll() {
+        rucGroupRepository.deleteAll();
+    }
+
+    /**
      * findBy通用方法
      */
     private RucGroupDO findBy(String byWhat, String key) {

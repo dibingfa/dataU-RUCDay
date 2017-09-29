@@ -10,7 +10,6 @@ import com.flash.dataU.rucday.service.RucGroupService;
 import com.flash.dataU.rucday.service.RucUserService;
 import com.flash.dataU.rucday.utils.RandomUtils;
 import com.flash.dataU.rucday.utils.UserIndexTransferUtils;
-import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,16 +83,6 @@ public class RucUserBusiness {
         packageIndexResponseBOs(dataIndexResponseBOs, userDO, groupDOS);
 
         // 数据库中的和现有的进行比较
-
-        System.out.println("------------------现有的---------------");
-        for (IndexResponseBO indexResponseBO:indexResponseBOs) {
-            System.out.println(indexResponseBO);
-        }
-        System.out.println("------------------数据库的---------------");
-        for (IndexResponseBO dataIndexResponseBO:dataIndexResponseBOs) {
-            System.out.println(dataIndexResponseBO);
-        }
-
         if (!indexResponseBOs.equals(dataIndexResponseBOs)) {
             //不相等说明有变动
             indexResponseBOs = dataIndexResponseBOs;

@@ -1,5 +1,6 @@
 package com.flash.dataU.rucday.bo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.flash.dataU.rucday.entity.RucGroupDO;
 import com.flash.dataU.rucday.entity.RucGroupMessageDO;
 
@@ -74,6 +75,6 @@ public class IndexResponseBO {
 
     @Override
     public String toString() {
-        return "IndexResponseBO{" + "groupDO=" + groupDO + ", totalMsg=" + totalMsg + ", unreadMsg=" + unreadMsg + ", lastGroupMessageDO=" + lastGroupMessageDO + '}';
+        return JSONObject.toJSONString(this);
     }
 }

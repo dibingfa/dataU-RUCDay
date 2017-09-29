@@ -25,7 +25,7 @@ public class RucGroupMessageService {
     private RedisOpsUtil redisOpsUtil;
 
     @Autowired
-    private RucGroupMessageRepository RucGroupMessageRepository;
+    private RucGroupMessageRepository rucGroupMessageRepository;
 
     /**
      * 根据索引查询群聊消息
@@ -73,7 +73,7 @@ public class RucGroupMessageService {
     public RucGroupMessageDO save(RucGroupMessageDO groupMessageDO) {
         // 存储到数据库
         groupMessageDO.setCreateTime(System.currentTimeMillis());
-        groupMessageDO = RucGroupMessageRepository.save(groupMessageDO);
+        groupMessageDO = rucGroupMessageRepository.save(groupMessageDO);
         // 存储redis
         String groupMessageDOStr = JSONObject.toJSONString(groupMessageDO);
         String redisKey = RedisKeyUtil.getFullKey(TABLE, GROUP_GUID, groupMessageDO.getToGuid());
@@ -88,6 +88,13 @@ public class RucGroupMessageService {
     public long countAll(String groupGuid) {
         String redisKey = RedisKeyUtil.getFullKey(TABLE, GROUP_GUID, groupGuid);
         return redisOpsUtil.countAll(redisKey);
+    }
+
+    /**
+     * 清空数据库
+     */
+    public void deleteAll() {
+        rucGroupMessageRepository.deleteAll();
     }
 
 

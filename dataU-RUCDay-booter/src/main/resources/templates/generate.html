@@ -29,10 +29,10 @@
         /**
          * test for Controller Class visit
          */
-        function testController() {
+        function group() {
             $.ajax({
                 type: "POST",
-                url: path + "/testController",
+                url: "/generate/group",
                 dataType: "text",
                 success: function (msg) {
                     $("#msg").html(msg);
@@ -43,10 +43,10 @@
         /**
          * test for Service Class visit
          */
-        function testService() {
+        function user() {
             $.ajax({
                 type: "POST",
-                url: path + "/testService",
+                url: "/generate//user",
                 dataType: "text",
                 success: function (msg) {
                     $("#msg").html(msg);
@@ -57,10 +57,10 @@
         /**
          * test for Dao Class visit
          */
-        function testDao() {
+        function groupMsg() {
             $.ajax({
                 type: "POST",
-                url: path + "/testDao",
+                url: "/generate/groupMsg",
                 dataType: "text",
                 success: function (msg) {
                     $("#msg").html(msg);
@@ -71,10 +71,10 @@
         /**
          * test for Redis Class visit
          */
-        function testRedis() {
+        function flushAll() {
             $.ajax({
                 type: "POST",
-                url: path + "/testRedis",
+                url: "/generate/flushAll",
                 dataType: "text",
                 success: function (msg) {
                     $("#msg").html(msg);
@@ -88,7 +88,7 @@
         function jsonTest() {
             $.ajax({
                 type: "POST",
-                url: path + "/jsonTest",
+                url: "/jsonTest",
                 dataType: "text",
                 success: function (msg) {
                     var data = eval('(' + msg + ')');
@@ -100,19 +100,16 @@
     </script>
 </head>
 <body>
-<h1>Test For DataU</h1>
-<p>In this page, you can test whatever you want, I have already made some basic test cases,
-    these cases can help you test if the project access from browser to database
-</p>
-    <button onclick="testController()">testController</button>
-    <button onclick="testService()">testService</button>
-    <button onclick="testDao()">testDao</button>
-    <button onclick="testRedis()">testRedis</button>
+<h3>RUCDay管理页面</h3>
+
+    <button onclick="group()">生成群聊</button>
+    <button onclick="user()">生成用户</button>
+    <button onclick="groupMsg()">生成群聊消息</button>
+    <button onclick="flushAll()">清空全部数据</button>
     <button onclick="getRootPath()">getRootPath</button>
 </p>
 <h3>result</h3>
-<div id="msg" style="width: 500px;height: 60px; border: 1px solid black;"></div>
-<br>
-<div id="div" style="width: 90px;height: 25px; border: 1px solid black; position: absolute; background-color: coral">Draggable</div>
+<div id="msg" style="width: 600px;height: 600px; border: 1px solid black;"></div>
+
 </body>
 </html>
