@@ -3,7 +3,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>入侵人大</title>
+    <title>校庆微信</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/css/group.css" rel="stylesheet"/>
+    <link href="/css/index.css" rel="stylesheet"/>
+    <script src="/js/jquery-1.11.3.js"></script>
+    <script src="/js/group.js"></script>
     <script type="text/javascript" src="/js/jquery-1.11.3.js"></script>
     <script>
 
@@ -15,8 +21,8 @@
             (function longPolling() {
                 var indexGroupInfos = $("#indexGroupInfos").val();
                 $.ajax({
-                    url: path + "/refreshIndexGroup",
-                    data: {"indexGroupInfos":indexGroupInfos},
+                    url: "/user/refreshIndexGroup",
+                    data: {"indexGroupInfos": indexGroupInfos},
                     dataType: "text",
                     timeout: 1000000,
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -33,14 +39,14 @@
                             $("#index").val(data.index);
                             $("#indexGroupInfos").val(msg);
                             // 插入最新数据
-                            $.each(data, function(index, item){
+                            $.each(data, function (index, item) {
                                 var groupDO = item.groupDO;
                                 var totalMsg = item.totalMsg;
                                 var unreadMsg = item.unreadMsg;
                                 var lastGroupMessageDO = item.lastGroupMessageDO;
-                                $("#"+groupDO.groupGuid+"_totalMsg").text(totalMsg);
-                                $("#"+groupDO.groupGuid+"_unreadMsg").text(unreadMsg);
-                                $("#"+groupDO.groupGuid+"_content").text(lastGroupMessageDO.content);
+                                $("#" + groupDO.groupGuid + "_totalMsg").text(totalMsg);
+                                $("#" + groupDO.groupGuid + "_unreadMsg").text(unreadMsg);
+                                $("#" + groupDO.groupGuid + "_content").text(lastGroupMessageDO.content);
                             });
                             longPolling();
                         }
@@ -50,67 +56,40 @@
 
         });
 
-
-        /**
-         * get root path, like "http://192.168.11.91", without a "/" in the end
-         */
-        var path = getRootPath();
-        function getRootPath() {
-            var strFullPath = window.document.location.href;
-            var strPath = window.document.location.pathname;
-            var pos = strFullPath.indexOf(strPath);
-            var prePath = strFullPath.substring(0, pos);
-            var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
-            return (prePath + postPath);
-        }
-
-        /**
-         * test for Controller Class visit
-         */
-        function testController() {
-            $.ajax({
-                type: "POST",
-                url: path + "/testController",
-                dataType: "text",
-                success: function (msg) {
-                    $("#msg").html(msg);
-                }
-            });
+        function enterGroup(groupGuid) {
+            window.location.href="/group/"+groupGuid;
         }
 
 
     </script>
 </head>
 <body>
-<h1>首页</h1>
-<table>
-    <tr>
-        <th>群名称</th>
-        <th>总消息数</th>
-        <th>未读消息数</th>
-        <th>最后一条消息</th>
-    </tr>
-    <tr th:each="indexGroupInfo:${session.indexGroupInfos}">
-        <!--<td>
-            <a th:href="@{'/group/'+${indexGroupInfo.groupDO.groupGuid}}" th:text="${indexGroupInfo.groupDO.name}"></a>
-        </td>
-        <td th:id="${indexGroupInfo.groupDO.groupGuid}+'_totalMsg'" th:text="${indexGroupInfo.totalMsg}">总消息</td>
-        <td th:id="${indexGroupInfo.groupDO.groupGuid}+'_unreadMsg'" th:text="${indexGroupInfo.unreadMsg}">未读消息数</td>
-        <td th:id="${indexGroupInfo.groupDO.groupGuid}+'_content'" th:text="${indexGroupInfo.lastGroupMessageDO.content}">最后一条消息</td>-->
+<div style="position: relative;">
+    <div th:each="indexGroupInfo:${session.indexGroupInfos}" class="group"
+         th:onclick="'javascript:enterGroup(\''+ ${indexGroupInfo.groupDO.groupGuid} +'\');'">
+            <img class="avatar" src="/images/default.png"/>
+            <div class="nickname">
+                <span th:text="${indexGroupInfo.groupDO.name}">
+                    群聊名称
+                </span>
+                <div th:text="${indexGroupInfo.lastGroupMessageDO.createTime}" class="time">
+                    时间
+                </div>
+            </div>
+            <div th:id="${indexGroupInfo.groupDO.groupGuid}+'_content'"
+                 th:text="${indexGroupInfo.lastGroupMessageDO.content}" class="content">
+                最后一条消息
+            </div>
+    </div>
+    <div class="index_bottom">
+        <img src="/images/wechat_bottom.jpg" width="100%" height="30px" height>
+    </div>
+</div>
 
-        <td>
-            <a th:href="@{'/group/'+${indexGroupInfo.groupDO.groupGuid}}" th:text="${indexGroupInfo.groupDO.name}"></a>
-        </td>
-        <td th:id="${indexGroupInfo.groupDO.groupGuid}+'_totalMsg'" text="-">-</td>
-        <td th:id="${indexGroupInfo.groupDO.groupGuid}+'_unreadMsg'" text="-">-</td>
-        <td th:id="${indexGroupInfo.groupDO.groupGuid}+'_content'" th:text="${indexGroupInfo.lastGroupMessageDO.content}">最后一条</td>
-
-    </tr>
-
-</table>
 
 <!--<input type="hidden" id="indexGroupInfos" th:value="${session.indexGroupInfos}"/>-->
-<input type="hidden" id="indexGroupInfos" value="[{'groupDO':{'createTime':1506656616470,'groupGuid':'36b94dcf-31f3-4ee7-af9a-baaf3e6aad41','groupId':14,'icon':'12','intro':'anything','name':'人大建筑群'},'lastGroupMessageDO':{'content':'微服私访','createTime':1506659769309,'fromGuid':'c784e9f1-4dbf-4361-83d0-28db4b72ea02','groupMessageId':112,'toGuid':'36b94dcf-31f3-4ee7-af9a-baaf3e6aad41'},'totalMsg':18,'unreadMsg':-5}, {'groupDO':{'createTime':1506656615920,'groupGuid':'91e101fd-b74c-4b21-8e87-dc47288bc1f2','groupId':13,'icon':'12','intro':'anything','name':'人大教师群'},'lastGroupMessageDO':{'content':'手动发送的','createTime':1506660415599,'fromGuid':'c784e9f1-4dbf-4361-83d0-28db4b72ea02','groupMessageId':116,'toGuid':'91e101fd-b74c-4b21-8e87-dc47288bc1f2'},'totalMsg':11,'unreadMsg':-5}, {'groupDO':{'createTime':1506656616696,'groupGuid':'5abc1c10-7c18-47f9-9c3c-65f471afb22a','groupId':15,'icon':'12','intro':'anything','name':'人大学生组织群'},'lastGroupMessageDO':{'content':'万万万万万万万','createTime':1506660355227,'fromGuid':'c784e9f1-4dbf-4361-83d0-28db4b72ea02','groupMessageId':115,'toGuid':'5abc1c10-7c18-47f9-9c3c-65f471afb22a'},'totalMsg':10,'unreadMsg':-5}]"/>
+<input type="hidden" id="indexGroupInfos"
+       value="[{'groupDO':{'createTime':1506656616470,'groupGuid':'36b94dcf-31f3-4ee7-af9a-baaf3e6aad41','groupId':14,'icon':'12','intro':'anything','name':'人大建筑群'},'lastGroupMessageDO':{'content':'微服私访','createTime':1506659769309,'fromGuid':'c784e9f1-4dbf-4361-83d0-28db4b72ea02','groupMessageId':112,'toGuid':'36b94dcf-31f3-4ee7-af9a-baaf3e6aad41'},'totalMsg':18,'unreadMsg':-5}, {'groupDO':{'createTime':1506656615920,'groupGuid':'91e101fd-b74c-4b21-8e87-dc47288bc1f2','groupId':13,'icon':'12','intro':'anything','name':'人大教师群'},'lastGroupMessageDO':{'content':'手动发送的','createTime':1506660415599,'fromGuid':'c784e9f1-4dbf-4361-83d0-28db4b72ea02','groupMessageId':116,'toGuid':'91e101fd-b74c-4b21-8e87-dc47288bc1f2'},'totalMsg':11,'unreadMsg':-5}, {'groupDO':{'createTime':1506656616696,'groupGuid':'5abc1c10-7c18-47f9-9c3c-65f471afb22a','groupId':15,'icon':'12','intro':'anything','name':'人大学生组织群'},'lastGroupMessageDO':{'content':'万万万万万万万','createTime':1506660355227,'fromGuid':'c784e9f1-4dbf-4361-83d0-28db4b72ea02','groupMessageId':115,'toGuid':'5abc1c10-7c18-47f9-9c3c-65f471afb22a'},'totalMsg':10,'unreadMsg':-5}]"/>
 
 
 </body>

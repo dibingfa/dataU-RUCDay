@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test For DataU</title>
+    <script type="text/javascript" src="/js/jquery-1.11.3.js"></script>
+    <script>
+
+        /**
+         * drag a div
+         */
+        window.onload=function(){
+
+        }
+
+        /**
+         * get root path, like "http://192.168.11.91", without a "/" in the end
+         */
+        var path = getRootPath();
+        function getRootPath() {
+            var strFullPath = window.document.location.href;
+            var strPath = window.document.location.pathname;
+            var pos = strFullPath.indexOf(strPath);
+            var prePath = strFullPath.substring(0, pos);
+            var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
+            return (prePath + postPath);
+        }
+
+        /**
+         * test for Controller Class visit
+         */
+        function group() {
+            $.ajax({
+                type: "POST",
+                url: "/generate/group",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for Service Class visit
+         */
+        function user() {
+            $.ajax({
+                type: "POST",
+                url: "/generate//user",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for Dao Class visit
+         */
+        function groupMsg() {
+            $.ajax({
+                type: "POST",
+                url: "/generate/groupMsg",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for Redis Class visit
+         */
+        function flushAll() {
+            $.ajax({
+                type: "POST",
+                url: "/generate/flushAll",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for json type return
+         */
+        function jsonTest() {
+            $.ajax({
+                type: "POST",
+                url: "/jsonTest",
+                dataType: "text",
+                success: function (msg) {
+                    var data = eval('(' + msg + ')');
+                    alert(data.msg);
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<h3>RUCDay管理页面</h3>
+
+    <button onclick="group()">生成群聊</button>
+    <button onclick="user()">生成用户</button>
+    <button onclick="groupMsg()">生成群聊消息</button>
+    <button onclick="flushAll()">清空全部数据</button>
+    <button onclick="getRootPath()">getRootPath</button>
+</p>
+<h3>result</h3>
+<div id="msg" style="width: 600px;height: 600px; border: 1px solid black;"></div>
+
+</body>
+</html>

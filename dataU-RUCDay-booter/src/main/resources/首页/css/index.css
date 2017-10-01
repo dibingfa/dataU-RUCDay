@@ -1,0 +1,49 @@
+﻿.group {
+    height: 60px;
+    border: 1px solid grey;
+    float: left;
+    width: 100%;
+}
+
+.group .avatar {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    border: 1px solid grey;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    float: left;
+    cursor: pointer;
+}
+
+.group .nickname {
+    font-weight: 700;
+    padding-left: 5px;
+    font-size: 15px;
+    font-family: 微软雅黑;
+    height: 34px;
+    line-height: 40px;
+    color: #000000;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+}
+
+.group .nickname .time {
+    font-weight: 400;
+    font-size: 12px;
+    font-family: 微软雅黑;
+    color: #808080;
+    margin-right: 10px;
+    float: right;
+}
+
+.group .content {
+    color: #808080;
+    padding-left: 5px;
+    margin-left: 10px;
+    font-size: 12px;
+    overflow: hidden;
+}

@@ -52,7 +52,7 @@ public class GenerateController {
     @Autowired
     private RedisOpsUtil redisOpsUtil;
 
-    private Jedis jedis = new Jedis("www.datauuu.com",6379);
+    private Jedis jedis = new Jedis("localhost",6379);
 
     private String[] users = {"张三", "李四", "王二麻子"};
     private String[] groups = {"人大教师群", "人大建筑群", "人大学生组织群"};
