@@ -9,6 +9,7 @@ import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,13 +66,25 @@ public class RucGroupService {
      */
     public RucGroupDO save(RucGroupDO groupDO) {
         // 存储到数据库
-        groupDO.setCreateTime(System.currentTimeMillis());
+        groupDO.setCreateTime(new Timestamp(System.currentTimeMillis()));
         groupDO = rucGroupRepository.save(groupDO);
         // 存储redis
         String groupDOStr = JSONObject.toJSONString(groupDO);
         redisOpsUtil.set(RedisKeyUtil.getFullKey(TABLE, GROUP_GUID, groupDO.getGroupGuid()), groupDOStr);
 
         return rucGroupRepository.save(groupDO);
+    }
+
+    /**
+     * 存储群聊框
+     */
+    public List<RucGroupDO> save(List<RucGroupDO> groupDOs) {
+        List<RucGroupDO> savedGroupDOs = new ArrayList<RucGroupDO>(groupDOs.size());
+        for (RucGroupDO groupDO:groupDOs) {
+            RucGroupDO saved = save(groupDO);
+            savedGroupDOs.add(saved);
+        }
+        return savedGroupDOs;
     }
 
     /**

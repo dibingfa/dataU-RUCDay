@@ -137,8 +137,8 @@ a.btn {
     -webkit-border-radius: 4px;  
     padding: 2px 4px;  
     font-size: 14px;  
-    height: 20px;  
-    line-height: 20px;  
+    height: 25px;
+    line-height: 25px;
     margin-top: 3px;  
     cursor: pointer;  
 }  
@@ -209,7 +209,8 @@ a.btn {
         clear: right;  
     }  
   
-    .message .avatar {  
+    .message .avatar {
+        position: relative;
         width: 40px;
         height: 40px;
         border-radius: 2px;  
@@ -236,7 +237,8 @@ a.btn {
         word-wrap: normal;  
     }  
   
-        .message .nickname .time {  
+        .message .nickname .time {
+            color: darkgray;
             margin-left: 10px;  
         }  
   
@@ -250,7 +252,7 @@ a.btn {
   
     .message .content {  
         overflow: hidden;  
-    }  
+    }
   
 .bubble {  
     max-width: 70%;  
@@ -264,7 +266,19 @@ a.btn {
     -moz-border-radius: 3px;  
     -webkit-border-radius: 3px;  
     margin: 0 10px;  
-}  
+}
+
+.red_number {
+    position: absolute;
+    top: 5px;
+    left: 35px;
+    width: 17px;
+    height: 17px;
+    background: red;
+    color: white;
+    text-align: center;
+    font-size: 11px;
+}
   
     .bubble.bubble_default {  
         background-color: #fff;  

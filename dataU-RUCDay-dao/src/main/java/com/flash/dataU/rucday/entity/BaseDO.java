@@ -3,6 +3,7 @@ package com.flash.dataU.rucday.entity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import java.sql.Timestamp;
 
 /**
  * .
@@ -14,15 +15,15 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class BaseDO {
 
-    protected Long createTime;
+    protected Timestamp createTime;
 
     @Basic
     @Column(name = "createTime")
-    public Long getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Long createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 }

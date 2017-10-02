@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class RucGroupMessageService {
     @Transactional
     public RucGroupMessageDO save(RucGroupMessageDO groupMessageDO) {
         // 存储到数据库
-        groupMessageDO.setCreateTime(System.currentTimeMillis());
+        groupMessageDO.setCreateTime(new Timestamp(System.currentTimeMillis()));
         groupMessageDO = rucGroupMessageRepository.save(groupMessageDO);
         // 存储redis
         String groupMessageDOStr = JSONObject.toJSONString(groupMessageDO);
@@ -80,6 +81,18 @@ public class RucGroupMessageService {
         redisOpsUtil.rpush(redisKey, groupMessageDOStr);
 
         return groupMessageDO;
+    }
+
+    /**
+     * 存储群聊信息
+     */
+    public List<RucGroupMessageDO> save(List<RucGroupMessageDO> groupMessageDOs) {
+        List<RucGroupMessageDO> savedGroupDOs = new ArrayList<RucGroupMessageDO>(groupMessageDOs.size());
+        for (RucGroupMessageDO groupMessageDO:groupMessageDOs) {
+            RucGroupMessageDO saved = save(groupMessageDO);
+            savedGroupDOs.add(saved);
+        }
+        return savedGroupDOs;
     }
 
     /**

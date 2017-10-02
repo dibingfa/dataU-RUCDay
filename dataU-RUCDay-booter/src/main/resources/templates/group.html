@@ -7,9 +7,68 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/css/group.css" rel="stylesheet" />
+    <link href="/css/general.css" rel="stylesheet" />
     <script src="/js/jquery-1.11.3.js"></script>
     <script src="/js/group.js"></script>
     <script>
+
+        /**
+         * 实时更新
+         */
+        $(function () {
+
+            (function longPolling() {
+                var index = $("#index").val();
+                var userGuid = $("#userGuid").val();
+                var groupGuid = $("#groupGuid").val();
+                $.ajax({
+                    url: "/group/refreshGroupMsg",
+                    data: {"index":index,"userGuid":userGuid,"groupGuid":groupGuid},
+                    dataType: "text",
+                    timeout: 10000,
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        if (textStatus == "timeout") { // 请求超时
+                            longPolling(); // 递归调用
+                            // 其他错误，如网络错误等
+                        } else {
+                            longPolling();
+                        }
+                    },
+                    success: function (msg, textStatus) {
+                        if (textStatus == "success") { // 请求成功
+                            var data = eval('(' + msg + ')');
+                            var newIndex = data.index;
+                            // 更新index
+                            if (newIndex != -1) {
+                                $("#index").val(data.index);
+                                // 插入最新数据
+                                $.each(data.groupMessageDetailResponseBOS, function(index, item){
+                                    $("#messageList").append("" +
+                                        "<div class='message'>" +
+                                            "<img class='avatar' src='/images/profile/" + item.userDO.icon + ".png' />" +
+                                            "<div class='content'>" +
+                                                "<div class='nickname'>" +
+                                                    "<nickname>"+item.userDO.name+"</nickname>" +
+                                                "</div>" +
+                                                "<div class='bubble bubble_default left'>" +
+                                                    "<div class='bubble_cont'>" +
+                                                        "<div class='plain'>" +
+                                                            "<pre>"+item.groupMessageDO.content+"</pre>" +
+                                                        "</div>" +
+                                                    "</div>" +
+                                                "</div>" +
+                                            "</div>" +
+                                        "</div>");
+                                });
+                                resetMessageArea();
+                            }
+                            longPolling();
+                        }
+                    }
+                });
+            })();
+
+        });
 
         /**
          * 发送按钮触发
@@ -21,11 +80,12 @@
                 return;
             }
             var username = $("#username").val();
+            var icon = $("#icon").val();
             var form = new FormData($("#message")[0]);
             // 写入聊天
             $("#messageList").append("" +
                 "<div class='message me'>" +
-                    "<img class='avatar' src='/images/default.png' />" +
+                    "<img class='avatar' src='/images/profile/" + icon + ".png' />" +
                     "<div class='content'>" +
                         "<div class='bubble bubble_primary right'>" +
                             "<div class='bubble_cont'>" +
@@ -64,11 +124,11 @@
                 <!-- 循环遍历群聊，显示在此 -->
                 <div th:each="responseBO:${groupDetailResponseBO.groupMessageDetailResponseBOS}"
                      th:class="${responseBO.userDO.userGuid==session.userinfo.userGuid}? 'message me' : 'message'">
-                    <img class="avatar" src="/images/default.png" />
+                    <img class="avatar" th:src="'/images/profile/'+ ${responseBO.userDO.icon} +'.png'" />
                     <div class="content">
                         <div class="nickname" th:if="${responseBO.userDO.userGuid!=session.userinfo.userGuid}">
                             <nickname th:text="${responseBO.userDO.name}">昵称</nickname>
-                            <span th:text="${responseBO.groupMessageDO.createTime}" class="time">时间</span>
+                            <span th:text="${#dates.format(responseBO.groupMessageDO.createTime, 'MM-dd hh:mm')}" class="time">时间</span>
                         </div>
                         <div th:class="${responseBO.userDO.userGuid==session.userinfo.userGuid}?
                                 'bubble bubble_primary right' : 'bubble bubble_default left'">
@@ -88,12 +148,12 @@
                     <!-- 消息发送框 -->
                     <div class="eaitWrap">
                         <form id="message">
-                            <input style="width: 90%" type="text" id="content" name="content" placeholder=""/>
+                            <input style="width: 90%" type="text" id="content" name="content" placeholder="" onblur="resetMessageArea()"/>
                             <input type="hidden" name="userGuid" th:value="${session.userinfo.userGuid}"/>
                             <input type="hidden" name="groupGuid" th:value="${groupDO.groupGuid}"/>
                         </form>
                     </div>
-                    <a class="btn btn_send" onclick="sendMsg()">send</a>
+                    <a class="btn btn_send" onclick="sendMsg()">发送</a>
                 </div>
             </div>
         </div>
@@ -103,6 +163,7 @@
 
 <input type="hidden" name="index" id="index" th:value="${groupDetailResponseBO.index}">
 <input type="hidden" name="userGuid" id="userGuid" th:value="${session.userinfo.userGuid}">
+<input type="hidden" name="icon" id="icon" th:value="${session.userinfo.icon}">
 <input type="hidden" name="groupGuid" id="groupGuid" th:value="${groupDO.groupGuid}">
 
 <input type="hidden" name="username" id="username" th:value="${session.userinfo.name}">

@@ -64,6 +64,8 @@ public class UserController {
         RucUserDO userDO = null;
         if (type == 1) {
             // 新用户注册
+            // 暂时让新用户注册的头像跟随性别，以后再扩展
+            icon = sex + "";
             UserRegisterResponseBO userRegisterResponseBO = rucUserBusiness.register(ip, name, sex, icon);
             userDO = userRegisterResponseBO.getUserDO();
             indexResponseBOS = userRegisterResponseBO.getIndexResponseBOS();

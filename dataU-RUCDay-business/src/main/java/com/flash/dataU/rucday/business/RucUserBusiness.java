@@ -13,9 +13,7 @@ import com.flash.dataU.rucday.utils.UserIndexTransferUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Administrator on 2017/9/24.
@@ -56,6 +54,12 @@ public class RucUserBusiness {
         List<IndexResponseBO> indexResponseBOs = new ArrayList<IndexResponseBO>();
         // 查询出所有群聊框
         List<RucGroupDO> groupDOS = rucGroupService.findAll();
+        // 排个序
+        Collections.sort(groupDOS, new Comparator<RucGroupDO>() {
+            public int compare(RucGroupDO o1, RucGroupDO o2) {
+                return (int) (o1.getGroupId() - o2.getGroupId());
+            }
+        });
         if (groupDOS == null || groupDOS.size() == 0) {
             return indexResponseBOs;
         }

@@ -1,13 +1,14 @@
 #layout{
     padding-top: 0px; 
     max-width: 768px;
-    margin:0 auto;
+    margin:0 0;
     min-width: 300px;
-    background: url(../images/reg_bg_ruc_format.jpg) no-repeat;
-        filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale'),alpha(opacity=20)";
-   -moz-background-size:100% 100%;
-    background-size:100% 100%;
-    min-height:480px;
+    min-height:800px;
+    background: url(../images/reg_bg_ruc_format.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 #layout span{
     display: block;

@@ -85,14 +85,41 @@
         /**
          * test for json type return
          */
-        function jsonTest() {
+        function flushRedis() {
             $.ajax({
                 type: "POST",
-                url: "/jsonTest",
+                url: "/generate/flushRedis",
                 dataType: "text",
                 success: function (msg) {
-                    var data = eval('(' + msg + ')');
-                    alert(data.msg);
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for json type return
+         */
+        function fillRedis() {
+            $.ajax({
+                type: "POST",
+                url: "/generate/fillRedis",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
+                }
+            });
+        }
+
+        /**
+         * test for json type return
+         */
+        function checkData() {
+            $.ajax({
+                type: "POST",
+                url: "/generate/checkData",
+                dataType: "text",
+                success: function (msg) {
+                    $("#msg").html(msg);
                 }
             });
         }
@@ -106,7 +133,9 @@
     <button onclick="user()">生成用户</button>
     <button onclick="groupMsg()">生成群聊消息</button>
     <button onclick="flushAll()">清空全部数据</button>
-    <button onclick="getRootPath()">getRootPath</button>
+    <button onclick="flushRedis()">清空redis</button>
+    <button onclick="fillRedis()">同步数据库和redis</button>
+    <button onclick="checkData()">检查是否同步</button>
 </p>
 <h3>result</h3>
 <div id="msg" style="width: 600px;height: 600px; border: 1px solid black;"></div>

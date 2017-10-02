@@ -2,11 +2,11 @@
 <html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>注册页面</title>
+    <title>人大校庆，邀您来聊</title>
     <meta charset="UTF-8">
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+          content="width=device-width,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -17,9 +17,13 @@
     <script type="text/javascript" src="/js/register.js"></script>
 </head>
 <body>
-<div id="layout">
-    <span>请直接登录</span>
+<div style="width: 0;height: 0; z-index:-100;position: relative;">
+    <img src="/images/logo320.jpg" />
+</div>
 
+<div id="layout">
+
+    <span>请直接登录</span>
 
     <form action="/user/register" method="post">
         <div id="info">
