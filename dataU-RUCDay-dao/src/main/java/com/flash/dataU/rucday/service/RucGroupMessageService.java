@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class RucGroupMessageService {
     private RedisOpsUtil redisOpsUtil;
 
     @Autowired
-    private RucGroupMessageRepository RucGroupMessageRepository;
+    private RucGroupMessageRepository rucGroupMessageRepository;
 
     /**
      * 根据索引查询群聊消息
@@ -72,8 +73,8 @@ public class RucGroupMessageService {
     @Transactional
     public RucGroupMessageDO save(RucGroupMessageDO groupMessageDO) {
         // 存储到数据库
-        groupMessageDO.setCreateTime(System.currentTimeMillis());
-        groupMessageDO = RucGroupMessageRepository.save(groupMessageDO);
+        groupMessageDO.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        groupMessageDO = rucGroupMessageRepository.save(groupMessageDO);
         // 存储redis
         String groupMessageDOStr = JSONObject.toJSONString(groupMessageDO);
         String redisKey = RedisKeyUtil.getFullKey(TABLE, GROUP_GUID, groupMessageDO.getToGuid());
@@ -83,11 +84,30 @@ public class RucGroupMessageService {
     }
 
     /**
+     * 存储群聊信息
+     */
+    public List<RucGroupMessageDO> save(List<RucGroupMessageDO> groupMessageDOs) {
+        List<RucGroupMessageDO> savedGroupDOs = new ArrayList<RucGroupMessageDO>(groupMessageDOs.size());
+        for (RucGroupMessageDO groupMessageDO:groupMessageDOs) {
+            RucGroupMessageDO saved = save(groupMessageDO);
+            savedGroupDOs.add(saved);
+        }
+        return savedGroupDOs;
+    }
+
+    /**
      * 存储群聊消息
      */
     public long countAll(String groupGuid) {
         String redisKey = RedisKeyUtil.getFullKey(TABLE, GROUP_GUID, groupGuid);
         return redisOpsUtil.countAll(redisKey);
+    }
+
+    /**
+     * 清空数据库
+     */
+    public void deleteAll() {
+        rucGroupMessageRepository.deleteAll();
     }
 
 

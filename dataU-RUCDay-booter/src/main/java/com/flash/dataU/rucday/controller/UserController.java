@@ -1,20 +1,21 @@
 package com.flash.dataU.rucday.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.flash.dataU.rucday.bo.IndexResponseBO;
 import com.flash.dataU.rucday.bo.UserRegisterResponseBO;
 import com.flash.dataU.rucday.business.RucUserBusiness;
 import com.flash.dataU.rucday.entity.RucUserDO;
 import com.flash.dataU.rucday.service.RucUserService;
 import com.flash.dataU.rucday.util.CookieUtils;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by Administrator on 2017/9/23.
@@ -42,7 +43,12 @@ public class UserController {
             return "register";
         }
         //已注册用户跳转到登录页面
-        request.getSession().setAttribute("userinfo", rucUserService.findByUserGuid(userGuid));
+        RucUserDO userDO = rucUserService.findByUserGuid(userGuid);
+        if (userDO == null) {
+            //此时如果cookie的值在数据库中找不到，则请用户重新注册
+            return "register";
+        }
+        request.getSession().setAttribute("userinfo", userDO);
         return "login";
     }
 
@@ -58,6 +64,8 @@ public class UserController {
         RucUserDO userDO = null;
         if (type == 1) {
             // 新用户注册
+            // 暂时让新用户注册的头像跟随性别，以后再扩展
+            icon = sex + "";
             UserRegisterResponseBO userRegisterResponseBO = rucUserBusiness.register(ip, name, sex, icon);
             userDO = userRegisterResponseBO.getUserDO();
             indexResponseBOS = userRegisterResponseBO.getIndexResponseBOS();
@@ -82,20 +90,20 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("refreshIndexGroup")
-    public List<IndexResponseBO> refreshIndexGroup(HttpServletRequest request) throws InterruptedException {
-        Thread.sleep(500L);
+    public List<IndexResponseBO> refreshIndexGroup(HttpServletRequest request, String indexGroupInfos) throws InterruptedException {
         long start = System.currentTimeMillis();
 
         while (true) {
-            // 尝试获取最新数据
+            // 前端的老数据
+            List<IndexResponseBO> indexGroupInfosFromWeb = JSONObject.parseArray(indexGroupInfos, IndexResponseBO.class);
             RucUserDO userDO = (RucUserDO)request.getSession().getAttribute("userinfo");
-            List<IndexResponseBO> indexResponseBOS = (List<IndexResponseBO>)request.getSession().getAttribute("indexGroupInfos");
-            indexResponseBOS = rucUserBusiness.refreshIndex(userDO, indexResponseBOS);
-            if (indexResponseBOS != null && indexResponseBOS.size()!=0) {
+
+            List<IndexResponseBO> indexResponseBOSFromData = rucUserBusiness.refreshIndex(userDO, indexGroupInfosFromWeb);
+            if (indexResponseBOSFromData != null && indexResponseBOSFromData.size()!=0) {
                 // 有数据更新
-                request.getSession().setAttribute("indexGroupInfos", indexResponseBOS);
+                request.getSession().setAttribute("indexGroupInfos", indexResponseBOSFromData);
                 request.getSession().setAttribute("userinfo", userDO);
-                return indexResponseBOS;
+                return indexResponseBOSFromData;
             }
 
             Thread.sleep(1000L);

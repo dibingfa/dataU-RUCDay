@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test For DataU</title>
+    <script type="text/javascript" src="/js/jquery-1.11.3.js"></script>
+    <script>
+
+
+        /**
+         * test for Controller Class visit
+         */
+        function userBreak() {
+            window.location.href="/user/break";
+        }
+
+    </script>
+</head>
+<body>
+<h3>您可能太长时间未操作</h3>
+<h3>也可能进行了某种该应用不支持的操作</h3>
+<h3>弹出这个“友好”的页面十分抱歉</h3>
+<h3>您可以点击下面的按钮重新进入</h3>
+<button onclick="userBreak()">重新进入</button>
+
+</body>
+</html>

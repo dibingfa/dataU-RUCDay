@@ -2,9 +2,14 @@
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>入侵人大</title>
-    <script type="text/javascript" src="/js/jquery-1.11.3.js"></script>
+    <title th:text="${groupDO.name}">群聊的名称</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/css/group.css" rel="stylesheet" />
+    <link href="/css/general.css" rel="stylesheet" />
+    <script src="/js/jquery-1.11.3.js"></script>
+    <script src="/js/group.js"></script>
     <script>
 
         /**
@@ -17,7 +22,7 @@
                 var userGuid = $("#userGuid").val();
                 var groupGuid = $("#groupGuid").val();
                 $.ajax({
-                    url: path + "/refreshGroupMsg",
+                    url: "/group/refreshGroupMsg",
                     data: {"index":index,"userGuid":userGuid,"groupGuid":groupGuid},
                     dataType: "text",
                     timeout: 10000,
@@ -38,8 +43,24 @@
                                 $("#index").val(data.index);
                                 // 插入最新数据
                                 $.each(data.groupMessageDetailResponseBOS, function(index, item){
-                                    $("#msgBlock").append("<tr><td>"+item.userDO.name+"</td><td>"+item.groupMessageDO.content+"</td><td></td></tr>");
+                                    $("#messageList").append("" +
+                                        "<div class='message'>" +
+                                            "<img class='avatar' src='/images/profile/" + item.userDO.icon + ".png' />" +
+                                            "<div class='content'>" +
+                                                "<div class='nickname'>" +
+                                                    "<nickname>"+item.userDO.name+"</nickname>" +
+                                                "</div>" +
+                                                "<div class='bubble bubble_default left'>" +
+                                                    "<div class='bubble_cont'>" +
+                                                        "<div class='plain'>" +
+                                                            "<pre>"+item.groupMessageDO.content+"</pre>" +
+                                                        "</div>" +
+                                                    "</div>" +
+                                                "</div>" +
+                                            "</div>" +
+                                        "</div>");
                                 });
+                                resetMessageArea();
                             }
                             longPolling();
                         }
@@ -49,86 +70,103 @@
 
         });
 
-
-        /**
-         * get root path, like "http://192.168.11.91", without a "/" in the end
-         */
-        var path = getRootPath();
-        function getRootPath() {
-            var strFullPath = window.document.location.href;
-            var strPath = window.document.location.pathname;
-            var pos = strFullPath.indexOf(strPath);
-            var prePath = strFullPath.substring(0, pos);
-            var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
-            return (prePath + postPath);
-        }
-
-        /**
-         * test for Controller Class visit
-         */
-        function testController() {
-            $.ajax({
-                type: "POST",
-                url: path + "/testController",
-                dataType: "text",
-                success: function (msg) {
-                    $("#msg").html(msg);
-                }
-            });
-        }
-
         /**
          * 发送按钮触发
          */
         function sendMsg() {
+            var content = $("#content").val();
+            if (content==""){
+                $("#content").attr("placeholder", "消息不能为空");
+                return;
+            }
+            var username = $("#username").val();
+            var icon = $("#icon").val();
             var form = new FormData($("#message")[0]);
+            // 写入聊天
+            $("#messageList").append("" +
+                "<div class='message me'>" +
+                    "<img class='avatar' src='/images/profile/" + icon + ".png' />" +
+                    "<div class='content'>" +
+                        "<div class='bubble bubble_primary right'>" +
+                            "<div class='bubble_cont'>" +
+                                "<div class='plain'>" +
+                                    "<pre>"+ content +"</pre>" +
+                                "</div>" +
+                            "</div>" +
+                        "</div>" +
+                    "</div>" +
+                "</div>");
+            //清除聊天框内容
+            $("#content").val("");
+            resetMessageArea();
             $.ajax({
                 type: "POST",
-                url: path + "/sendMsg",
+                url: "/group/sendMsg",
                 data: form,
                 contentType: false,
                 processData: false,
                 success: function (msg) {
-                    // 写入聊天
-                    var content = $("#content").val();
-                    var username = $("#username").val();
-                    $("#msgBlock").append("<tr><td>"+username+"</td><td>"+content+"</td><td></td></tr>");
                 }
             });
         }
 
-
     </script>
 </head>
 <body>
-<h1 th:text="${groupDO.name}">首页</h1>
-<table id="msgBlock">
-    <tr>
-        <th>发送者</th>
-        <th>消息内容</th>
-        <th>时间</th>
-    </tr>
-    <tr th:each="responseBO:${groupDetailResponseBO.groupMessageDetailResponseBOS}">
-        <td th:text="${responseBO.userDO.name}"></td>
-        <td th:text="${responseBO.groupMessageDO.content}"></td>
-        <td th:text="${responseBO.groupMessageDO.createTime}"></td>
-    </tr>
-</table>
+<div class="main">
+    <div class="main_inner clearfix">
+        <div class="panel"></div>
+        <div id="chatArea" class="box chat">
+            <div class="box_hd"></div>
 
-<form id="message">
-    <br/>
-    发送内容<input type="text" id="content" name="content"/>
-    <input type="hidden" name="userGuid" th:value="${session.userinfo.userGuid}"/>
-    <input type="hidden" name="groupGuid" th:value="${groupDO.groupGuid}"/>
-</form>
+            <!-- 消息列表 -->
+            <div class="box_bd" id="messageList">
+                <!-- 循环遍历群聊，显示在此 -->
+                <div th:each="responseBO:${groupDetailResponseBO.groupMessageDetailResponseBOS}"
+                     th:class="${responseBO.userDO.userGuid==session.userinfo.userGuid}? 'message me' : 'message'">
+                    <img class="avatar" th:src="'/images/profile/'+ ${responseBO.userDO.icon} +'.png'" />
+                    <div class="content">
+                        <div class="nickname" th:if="${responseBO.userDO.userGuid!=session.userinfo.userGuid}">
+                            <nickname th:text="${responseBO.userDO.name}">昵称</nickname>
+                            <span th:text="${#dates.format(responseBO.groupMessageDO.createTime, 'MM-dd hh:mm')}" class="time">时间</span>
+                        </div>
+                        <div th:class="${responseBO.userDO.userGuid==session.userinfo.userGuid}?
+                                'bubble bubble_primary right' : 'bubble bubble_default left'">
+                            <div class="bubble_cont">
+                                <div class="plain">
+                                    <pre th:text="${responseBO.groupMessageDO.content}">消息内容</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 发送框 -->
+            <div class="box_ft">
+                <div class="box_ft_hd">
+                    <!-- 消息发送框 -->
+                    <div class="eaitWrap">
+                        <form id="message">
+                            <input style="width: 90%" type="text" id="content" name="content" placeholder="" onblur="resetMessageArea()"/>
+                            <input type="hidden" name="userGuid" th:value="${session.userinfo.userGuid}"/>
+                            <input type="hidden" name="groupGuid" th:value="${groupDO.groupGuid}"/>
+                        </form>
+                    </div>
+                    <a class="btn btn_send" onclick="sendMsg()">发送</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <input type="hidden" name="index" id="index" th:value="${groupDetailResponseBO.index}">
 <input type="hidden" name="userGuid" id="userGuid" th:value="${session.userinfo.userGuid}">
+<input type="hidden" name="icon" id="icon" th:value="${session.userinfo.icon}">
 <input type="hidden" name="groupGuid" id="groupGuid" th:value="${groupDO.groupGuid}">
 
 <input type="hidden" name="username" id="username" th:value="${session.userinfo.name}">
-
-<button onclick="sendMsg()">发送</button>
 
 </body>
 </html>

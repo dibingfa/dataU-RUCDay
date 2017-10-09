@@ -3,20 +3,70 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>入侵人大</title>
+    <title>人大80年校庆微信</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/css/group.css" rel="stylesheet"/>
+    <link href="/css/index.css" rel="stylesheet"/>
+    <script src="/js/jquery-1.11.3.js"></script>
+    <script src="/js/group.js"></script>
     <script type="text/javascript" src="/js/jquery-1.11.3.js"></script>
     <script>
 
+        var bottom_msg = [
+            "人大真相0：除了北大清华,哪个学校敢站出来说自己比人大牛B的？等等，人大附的闭嘴",
+            "人大真相1：如果遇到有人问你以下地方——中国人民吃不起饭大学，中国人民挂科毁所有大学，中国人大附中附属大学，中国人民女神大学，中国人民搞基大学，中国人民读史读经典大学，中国人民性别比例超级不平衡大学，中国人民世界一流大学，中国人民总放假大学，中国人民施工大学、中共中央第二党校，社会主义神学院......等等怎么走，不要一脸懵逼！他们问的就是咱们——中国人民大学",
+            "人大真相2：教育部直属，985，211，第一批全国性重点大学（6所），顶级大学标配艾瑞深中国校友会网的《2016中国大学评价研究报告》，人大名列第六，与清北、中科大、国防大、中科院大被列入“超一流大学”；9个专业全国第一，社科被誉为“中国人文社会科学的一面旗帜”。但由于历史以及定位问题，理工科比较袖珍，造成所谓终合实力不强，因此，什么top3候选、高校撕逼从来没有人大的份.",
+            "人大真相3：人大前身是1937年诞生于延安的陕北公学，陕北公学期间，毛爷爷在不到两年内，先后十多次来校讲课，两次题词，说陕北公学是：中国进步的一幅缩图，有陕公，中国就不会亡。",
+            "人大真相4：由于理工科孱弱，人大一直有合并其他大学的梦想......比如说跟北京理工大学合并成中国民工大学，再合并中国农业大学成中国农民工大学，最后一步是合并北京外国语大学成中外民工大学。再比如说跟北京航空航天大学合并成中国民航大学......然而，在历史上，北理、民大、农大，北外，中央戏院，中央美院等等，都曾经是人大前身——华北大学的一个学院而已！",
+            "人大真相5：人大是新中国办的第一所新式学校，是党的亲儿子，苗根正好......人大实际上是苏联帮助建设的，标准苏联模式，所以人大的专业是按照国家部委来设计的，最初有计划经济、财政信用、工厂管理、合作社、毛衣、统计、国民经济计划、农业经济计划......现在也好不到哪去，农业与农村发展学院的同学表示：宝宝心里苦，但宝宝在默默建设中国特色社会主义！",
+            "人大真相6：人民大学是党一手栽培起来的，这没错，但是在文革里，反对左倾呼声最高，以至于大学被解散的不是北大，不是清华，是中国人民大学！文革一开始，人大因为“百家争鸣”，成了重灾区，四人帮就对人大各种陷害栽赃闹事，邓爷爷跟周总理两人出面都保不住......最终在1970年10月，中国人民大学停办，彻底解散......随后二炮进驻ps：最先动手的是清华，最先动口的是北大，然后这锅人大背了！",
+            "人大真相7：在郭影秋校长等人的努力以及邓爷爷的支持下，人大1978年复校；人大复校后，那些从田间回来，还是浑身泥土的教授们敲锣打鼓地给302车站送匾——就因为他们回校时看见302站牌上写的还是“人民大学”",
+            "人大真相8：人大虽然复校，然而二炮却不肯迁走。后来，因为传出要将阅览室改成食堂，引发学生不满，最终导致两千多人大学生走上长安街，绕了一圈天安门，新华门静坐，高呼“只准党指挥枪，不许枪对抗党”，迫使二炮撤离人大校园，归还了三分之一；这成为中共建政后唯一一次达到诉求的学生运动；周总理曾给人大划拨了5000亩地，北到黄庄，南到民院，东到燕山酒店，但现在只剩下1000亩，就是这一历史原因",
+            "人大真相9：学校本部占地面积多达1044亩！！！其中建筑面积已经占了765亩！！！面积竟然挤进了北京前十！！！就是第十好吗！！",
+            "人大真相10：人大旧址在铁狮子胡同，旧门牌为1号，俗称'铁1号'；段祺瑞执政府所在地，也是清代的和亲王府旧址，同时也是鲁迅《纪念刘和珍君》提及“三一八”惨案发生地；解放后拨给了中国人民大学，学校在院里盖起三栋宿舍楼，这没少给电影厂摄制组当外景地，《南征北战》、《鄂尔多斯风暴》、《佩剑将军》、《阳光灿烂的日子》等等影片的若干镜头，都取自这里；后来成了二炮的家属区......",
+            "人大真相11：大家最喜闻乐见的——人大校徽！其实三人校徽是03年才启用的，之前一直是延安宝塔山；然而无论如何，人大校徽深受人民热爱，马頔曾说：我喜欢人大，因为我喜欢人大校徽；在《中国青年报》的校徽评选中，人大校徽以34%的绝对优势获选“公众最喜欢的大学校徽”",
+            "人大真相12：本应用制作者是人大人",
+            "人大真相13：关于校徽含义，有“人民人本人文”、“三人行，必有我师”“携手劳作”、“同向而行”然而民间是：“三个人可以成立一个党支部”、“真正的人大人就是中间的那个，可攻可受，进退自如，见缝插针，能屈能伸”以及，“你懂的”......",
+            "人大真相14：人大先后有四首校歌：《陕北公学校歌》、《华北联合大学校歌》、《中华人民大学校歌》、《中华人民大学之歌》《中华人民大学之歌》词纪宝成，曲是《走进新时代》的作者印青，他老人家为60年国庆作的歌跟咱们校歌搭配一起唱，毫无违和感，这种无缝对接也成为了人大各种大大小小活动经常上演的节目......壮哉人大！带领我们走进新时代......",
+            "人大真相15：本应用制作者是人大人",
+            "人大真相16：中国人民大学过去的英文名确实是 People‘s University of China，这一点在校内部分2000年前后的建筑上都有体现。但后来，前校长纪宝成率团赴欧美大学访问时屡遭冷落，后来才知道是校名惹了麻烦。因为 People's University 在欧美有“成人函授学校”、“社区夜大”的含义......然后 People 带着浓厚的政治意味......与其类似还有中央民族大学改名 Minzu University of China......",
+            "人大真相17：“中国人民大学”几个字是吴玉章，也就是人大第一任校长的手书，但是因为他生前没有为人大题写校名，所以这几个字是从吴玉章校长手迹中选字组合的董必武和刘少奇（因此毛爷爷不便再题）和华国锋都为人大题写过校名，都先后被铲掉了",
+            "人大真相18：人大以前有个外号叫“中国人民不准放露天电影大学”因为当年的游行事件，就是在放电影、人都聚在一起时闹起来的，于是大家懂的不过后来又有露天电影了，基本上几个星期组织一次免费观影，不过选地是国学馆楼顶......大家也懂的",
+            "人大真相19：本应用制作这是人大人",
+            "人大真相20：因为东门求是石横在中间，所以进人民大学要么“左倾”（往左走），要么“右倾”（往右走），如果谁想实事求是，只能往中间走，就会撞得头破血流",
+            "人大真相21：非典后的求是石，台基不见了，石头落地了，而且还后退了十米；对此，官方解释：实事求是真正脚踏实地了！民间说法：实事求是靠边站了......我校吃枣药丸！！！",
+            "人大真相22：历史上中央曾打算给人大划地扩建到国图，但被当时校长以朴素的革命感情拒绝了......然后，我们可以走路15分钟横穿一次整个人大；撒开腿跑，5分钟之内东西门横穿一次（单向）不是问题然后，留下了无数吐槽学校小的段子......",
+            "人大真相23：有学校自称大学中的瑞士，人大人听后都是笑而不语——我们是大学中的梵蒂冈！（人大神段子之一）明德楼不愧为中国最大的单体教学楼，一栋楼就占了学校一半。为什么我们觉得校园小？因为我们是人大啊！人大了，校园自然就小啦！期末图书馆门口排队排到了学校东门，太心疼这几十个人了。",
+            "人大真相24：打电话的时候'你在哪呢？''我在西门啊！';'什么？！我在东门啊！不是说好东门集合吗？'五分钟后，'啊，我看到你了！'",
+            "人大真相25：跟前女友分手后很少在校园逛荡，因为每日平均相遇次数约等于十次。只好去别的学校找了个妹子……“我们女生多！”“可你们地方小啊！”“我们有空调！”“可你们地方小啊！”“我们排名高！”“可你们地方小啊！”",
+            "人大真相26：2011年，教育部说批给人大东校区占地2400多亩来建通州校区；然后2015年7月，又说要把通州建成北京行政副中心，于是减到大概1900余亩......",
+            "人大真相27：2001年， 香港的孔教学院院长汤恩佳打电话给纪宝宝，说要给人大捐个孔子像。但建国后还没有学校敢立他老人家，人大接受了，开了个头，但也只敢放角落里；过了段时间，看见没上头啥动静，山东大学、北师大等纷纷要求汤土豪也捐一个，然后，全国许多大学也纷纷立起来孔子像；只能说，纪宝宝胆真肥！",
+            "人大真相28：当时人大被要求打“985”申请报告，但是当时的校长觉得之前那个“211”搞得挺水的，我们就不去趟这个浑水了，还不如踏踏实实搞点实在的，所以人大就不是第一批“985”；结果“985”一下子给了清华3.8亿拨款，校长很后悔，在第二批的时候积极打了申请报告，然后一众老师开始想人文社科类学校3.8亿该怎么花，越想越激动......结果第二批就不那么值钱了，拨款也就是清华的零头......大概9600万吧......",
+            "人大真相29：【一勺池底刷绿漆】一勺池是人工挖出来的，当时是为了在百家园旁边堆座风水山，于是挖出了个大坑，然后干脆放水进去，再立块石头，于是又成了一道风景；诗云：吞吐三江水，怡然一勺池！也叫人大海，人大中面积最大的水面，面积多达70平方米！绕池一圈需要90秒钟！池水最深处居然能够雁过小腿！看着很深的样子，因为池底刷！了！绿！漆！",
+            "人大真相30：【二层食堂装电梯】这个说的是北区食堂，在一层和二层之间装了一个仅供一个站立的又窄又短的单向手扶电梯。它时而上行，时而下行，时而不动，是一段不知道它为啥在这，不知道它在这干啥，不知道它干这有啥卵用的一段神奇电梯。",
+            "人大真相31：【男生不过一米七】不过原先似乎是“男女比例1：7”，都特么普通话不标准！大家都知道人们为了押韵啥事都做的出来！！虽然我人大男生不多，但是大多数还是过了一米七的！",
+            "人大真相32：刘强东东哥是人大的，1996年毕业于人大社会学系。东哥赚着宅男的钱，迎娶了宅男的女神奶茶妹妹，现在也没人再拿人大是清华后花园的老梗说事儿了。如今，师兄回到母校开店，还在中关村开了个“JD+智能奶茶馆”，欢迎清华学子来喝奶茶",
+            "人大真相33：人大第一任校长，也是人大创始人吴玉章校长，在人大师生们心中是神一般的存在！老校长是副总理级校长，被誉为“延安五老”，做过三件影响深远的事情：简体汉字、汉语拼音、推广普通话。任校长十七年，桃李遍天下；老校长于1966年病逝，倒在任内，之后，再无大树为人大遮风挡雨，人大从此命运多舛；为了纪念老校长，人大于1983年决定设立吴玉章奖金",
+            "人大真相34：食堂六个，超市六个，咖啡厅十个，餐厅十五个，还有无数小吃路边摊。得益于学校面积，人大的吃货密度绝对全国第一。",
+            "人大真相35：人大是个成家立业的好地方：东门是海淀街道婚姻登记所，西门是北京工商局，国家计生委曾在文化大厦办公......然后公交师傅会热情的提醒你：人民大学站到了，要办证的同志请下车",
+            "人大真相36：八百人大其实只有600个座位，因为改造过一次别人嘲笑：哪见过这么小的礼堂？俺们冷笑一声：你看看哪儿有俺们这么大的教室！",
+            "人大真相37：涂鸦墙位于海淀区人民大学南路，长730米，平均高2.5米。这是目前国内规模最大、面积最大的一面涂鸦墙。11月12日，在奥运倒计时1000天之后，这面墙被命名为“北京之墙”这里和品园后面那座徐艺专属涂鸦墙有异曲同工之妙。&nbsp;然后如果你看见别人对着我们的涂鸦墙大喊“坑爹”，你可以把他们的帽子什么的扔到对面去",
+            "人大真相38：人大西门改造的时候，有人提议修成窑洞（陕北建校）的形状，弄了大半年，结果是烈士陵园然而，13年前有个妹子去西门甩了35次头几乎把脖子摔断之后，这道墙就成了人大的标志......于是，每年毕业季，你会看见西门外一大堆妹子排着队等着去甩头发......那一年的人大主页也瘫痪了......其实你不知道的是，人大主页也是介绍过人大男神的......",
+            "人大真相39：关于人大附中那些梗：北京学校top3是：北京大学，清华大学，人大附中！人大其实是“人大附中附属大学”人大附，在帝都实力远超人大：他们的口号——今年不努力，来年进隔壁人大附学生：今年不努力，明年读隔壁人大师生",
+            "人大真相40：春假梗。春假就是在五一长假之前会多放3到4天，加上周末和五一就会有一段很长的假期！！春假一放，北京各大火车站乌泱泱的都是人大人，各大景点接头暗号是大喊“国民表率”，会有人接“社会栋梁”。然而春假用暑假来换的！并不是凭空多出来的！TAT此外，自国务院公布新放假规定以后，人大每年五一放假天数……7天......不愧是中国人民总放假大学",
+            "人大真相41：2010年1月15日，中国人民大学召开2009—2010学年第7次校长办公会，确定玉兰花为校花，银杏树为校树玉兰又快开了呀，可是每年玉兰开过不久就是毕业季了......对了，说起毕业，人大毕业服的配色一向不走寻常路，本科学士服使用的红色通常是其他学校的博士专用色（足见人大对红色的热爱！）在黑袍基础上，本硕博的绶带依次是红色、蓝色和黄色。"
+        ];
 
         /**
          * 实时更新
          */
         $(function () {
-
             (function longPolling() {
+                var indexGroupInfos = $("#indexGroupInfos").val();
                 $.ajax({
-                    url: path + "/refreshIndexGroup",
-                    data: {},
+                    url: "/user/refreshIndexGroup",
+                    data: {"indexGroupInfos": indexGroupInfos},
                     dataType: "text",
                     timeout: 1000000,
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -31,15 +81,22 @@
                         if (textStatus == "success") { // 请求成功
                             var data = eval('(' + msg + ')');
                             $("#index").val(data.index);
+                            $("#indexGroupInfos").val(msg);
                             // 插入最新数据
-                            $.each(data, function(index, item){
+                            $.each(data, function (index, item) {
                                 var groupDO = item.groupDO;
                                 var totalMsg = item.totalMsg;
                                 var unreadMsg = item.unreadMsg;
                                 var lastGroupMessageDO = item.lastGroupMessageDO;
-                                $("#"+groupDO.groupGuid+"_totalMsg").text(totalMsg);
-                                $("#"+groupDO.groupGuid+"_unreadMsg").text(unreadMsg);
-                                $("#"+groupDO.groupGuid+"_content").text(lastGroupMessageDO.content);
+                                var createTime = item.lastGroupMessageDO.createTime;
+                                $("#" + groupDO.groupGuid + "_totalMsg").text("共" + totalMsg + "条");
+                                $("#" + groupDO.groupGuid + "_unreadMsg").text(unreadMsg);
+                                $("#" + groupDO.groupGuid + "_content").text(lastGroupMessageDO.content);
+                                if (unreadMsg == 0) {
+                                    $("#" + groupDO.groupGuid + "_unreadMsg").css("display", "none");
+                                } else {
+                                    $("#" + groupDO.groupGuid + "_unreadMsg").css("display", "inline");
+                                }
                             });
                             longPolling();
                         }
@@ -49,56 +106,75 @@
 
         });
 
-
-        /**
-         * get root path, like "http://192.168.11.91", without a "/" in the end
-         */
-        var path = getRootPath();
-        function getRootPath() {
-            var strFullPath = window.document.location.href;
-            var strPath = window.document.location.pathname;
-            var pos = strFullPath.indexOf(strPath);
-            var prePath = strFullPath.substring(0, pos);
-            var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
-            return (prePath + postPath);
+        function enterGroup(groupGuid) {
+            window.location.href="/group/"+groupGuid;
         }
 
-        /**
-         * test for Controller Class visit
-         */
-        function testController() {
-            $.ajax({
-                type: "POST",
-                url: path + "/testController",
-                dataType: "text",
-                success: function (msg) {
-                    $("#msg").html(msg);
-                }
-            });
+        function liuwei() {
+            alert("您可以在下面任意的群中留下您宝贵的文字");
+            //window.location.href="/group/liuwei";
+        }
+
+        function press_bottom() {
+            var num = bottom_msg.length;
+            var random = Math.floor(Math.random()*num);
+            alert(bottom_msg[random]);
         }
 
 
     </script>
 </head>
 <body>
-<h1>首页</h1>
-<table>
-    <tr>
-        <th>群名称</th>
-        <th>总消息数</th>
-        <th>未读消息数</th>
-        <th>最后一条消息</th>
-    </tr>
-    <tr th:each="indexGroupInfo:${session.indexGroupInfos}">
-        <td>
-            <a th:href="@{'/group/'+${indexGroupInfo.groupDO.groupGuid}}" th:text="${indexGroupInfo.groupDO.name}"></a>
-        </td>
-        <td th:id="${indexGroupInfo.groupDO.groupGuid}+'_totalMsg'" th:text="${indexGroupInfo.totalMsg}">总消息</td>
-        <td th:id="${indexGroupInfo.groupDO.groupGuid}+'_unreadMsg'" th:text="${indexGroupInfo.unreadMsg}">未读消息数</td>
-        <td th:id="${indexGroupInfo.groupDO.groupGuid}+'_content'" th:text="${indexGroupInfo.lastGroupMessageDO.content}">最后一条消息</td>
-    </tr>
-</table>
+<div>
 
+    <!-- 刘伟专栏 -->
+    <div class="group" onclick="javascript:liuwei();" style="position: relative;">
+        <img class="avatar" src="/images/profile/101.png"/>
+        <div class="nickname">
+            <span>
+                RUC小庆
+            </span>
+            <div class="time">
+                欢迎来到人大
+            </div>
+        </div>
+        <div class="content">
+            人大80周年校庆，邀请你们进来聊聊
+        </div>
+    </div>
+
+    <!-- 所有群聊 -->
+    <div th:each="indexGroupInfo:${session.indexGroupInfos}" class="group"
+         th:onclick="'javascript:enterGroup(\''+ ${indexGroupInfo.groupDO.groupGuid} +'\');'"
+         style="position: relative;">
+        <img class="avatar" th:src="'/images/profile/'+ ${indexGroupInfo.groupDO.icon} +'.png'"/>
+        <div th:id="${indexGroupInfo.groupDO.groupGuid}+'_unreadMsg'" class="red_number"
+             style="display: none;">-</div>
+        <div class="nickname">
+            <span th:text="${indexGroupInfo.groupDO.name}">
+                群聊名称
+            </span>
+            <div th:id="${indexGroupInfo.groupDO.groupGuid}+'_totalMsg'" class="time">
+                加载中...
+            </div>
+        </div>
+        <div th:id="${indexGroupInfo.groupDO.groupGuid}+'_content'"
+             th:text="${indexGroupInfo.lastGroupMessageDO.content}" class="content">
+            最后一条消息
+        </div>
+    </div>
+
+
+
+    <div class="index_bottom" onclick="javascript:press_bottom();">
+        <img src="/images/wechat_bottom.jpg" width="100%" height="30px" height>
+    </div>
+</div>
+
+
+<!--<input type="hidden" id="indexGroupInfos" th:value="${session.indexGroupInfos}"/>-->
+<input type="hidden" id="indexGroupInfos"
+       value="[{'groupDO':{'createTime':1506656616470,'groupGuid':'36b94dcf-31f3-4ee7-af9a-baaf3e6aad41','groupId':14,'icon':'12','intro':'anything','name':'人大建筑群'},'lastGroupMessageDO':{'content':'微服私访','createTime':1506659769309,'fromGuid':'c784e9f1-4dbf-4361-83d0-28db4b72ea02','groupMessageId':112,'toGuid':'36b94dcf-31f3-4ee7-af9a-baaf3e6aad41'},'totalMsg':18,'unreadMsg':-5}, {'groupDO':{'createTime':1506656615920,'groupGuid':'91e101fd-b74c-4b21-8e87-dc47288bc1f2','groupId':13,'icon':'12','intro':'anything','name':'人大教师群'},'lastGroupMessageDO':{'content':'手动发送的','createTime':1506660415599,'fromGuid':'c784e9f1-4dbf-4361-83d0-28db4b72ea02','groupMessageId':116,'toGuid':'91e101fd-b74c-4b21-8e87-dc47288bc1f2'},'totalMsg':11,'unreadMsg':-5}, {'groupDO':{'createTime':1506656616696,'groupGuid':'5abc1c10-7c18-47f9-9c3c-65f471afb22a','groupId':15,'icon':'12','intro':'anything','name':'人大学生组织群'},'lastGroupMessageDO':{'content':'万万万万万万万','createTime':1506660355227,'fromGuid':'c784e9f1-4dbf-4361-83d0-28db4b72ea02','groupMessageId':115,'toGuid':'5abc1c10-7c18-47f9-9c3c-65f471afb22a'},'totalMsg':10,'unreadMsg':-5}]"/>
 
 
 </body>

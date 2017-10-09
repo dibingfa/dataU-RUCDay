@@ -2,21 +2,18 @@ package com.flash.dataU.rucday.business;
 
 import com.flash.dataU.rucday.bo.GroupDetailResponseBO;
 import com.flash.dataU.rucday.bo.GroupMessageDetailResponseBO;
-import com.flash.dataU.rucday.entity.RucGroupDO;
 import com.flash.dataU.rucday.entity.RucGroupMessageDO;
 import com.flash.dataU.rucday.entity.RucUserDO;
 import com.flash.dataU.rucday.service.RucGroupMessageService;
 import com.flash.dataU.rucday.service.RucGroupService;
 import com.flash.dataU.rucday.service.RucUserService;
-import com.flash.dataU.rucday.utils.RandomUtils;
 import com.flash.dataU.rucday.utils.UserIndexTransferUtils;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +29,14 @@ public class RucGroupBusiness {
 
     @Autowired private RucGroupMessageService rucGroupMessageService;
 
+    private static final int MAX_MGS_NUM = 500;
+
     /**
      * 进入群聊
      */
     public GroupDetailResponseBO enterGroup(String userGuid, String groupGuid) {
         // 查询出所有属于该群的消息
-        List<RucGroupMessageDO> groupMessageDOS = rucGroupMessageService.findAll(groupGuid);
+        List<RucGroupMessageDO> groupMessageDOS = rucGroupMessageService.findAll(groupGuid, MAX_MGS_NUM);
         int index = groupMessageDOS.size() - 1;
         // 封装进返回对象
         GroupDetailResponseBO groupDetailResponseBO = new GroupDetailResponseBO();

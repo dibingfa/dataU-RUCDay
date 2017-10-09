@@ -1,0 +1,162 @@
+#layout{
+    padding-top: 0px; 
+    max-width: 768px;
+    margin:0 0;
+    min-width: 300px;
+    min-height:800px;
+    background: url(../images/reg_bg_ruc_format.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+#layout span{
+    display: block;
+    position: relative;
+    text-align: center;
+    height:80px;
+    line-height: 80px;
+    font-family: "Microsoft YaHei";
+    color:#FFFFFF;
+    font-size: 1.5em;
+}
+#layout #info{
+    line-height: 80px;
+    text-align: center;
+    font-size: 1.3em
+
+}
+#layout ul li{
+    list-style: none;
+    margin-left:11%;
+    position: relative;
+}
+#err_msg{
+    height:15px;
+    text-align: center;
+    color:red;
+}
+.username,.yzm, .pwd, .pwd2{
+    width:70%;
+    height:30px;
+    border-radius:4px;
+    background:#fff;
+    filter:alpha(opacity:70);
+    opacity: 0.7;
+    list-style: none;
+    margin:5px 0;
+    padding-left:50px;
+    border:1px solid #ccc;
+}
+.un,.yz, .pw, .pw2{
+    position: absolute;
+    margin-top:7px;
+}
+.queren{
+    list-style: none;
+    margin:5px 0;
+    width:25%; 
+    margin-left:10%;
+    height:20px;
+    position:relative;
+}
+.fx{
+    width:13px;
+    height:13px;
+    border:1px solid #4f7b9c;
+    float: left;
+}
+.queren p{
+    text-align: left;
+    margin-top:2px; 
+    font-family: "Microsoft YaHei";
+    font-size: 12px;
+    color:#0C0C0C;
+    width:180px;
+}
+.reg-btn{
+    width:100%;
+    height:30%;
+    margin-top:80px;
+}
+.submit{
+    width:70%;
+    height:35px;
+    background:#f34541;
+    border:1px solid #f34541;
+    text-align: center;
+    margin:auto 0 0 auto;
+    color:#fff;
+    font-family: "Microsoft YaHei";
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.reg-login p{
+    width:70%;
+    height:35px;
+    line-height: 35px;
+    background:#989898;
+    border:1px solid #989898;
+    text-align: center;
+    margin:15px 0 0 11%;
+    color:#fff;
+    font-family: "Microsoft YaHei";
+    font-size: 14px;
+    border-radius: 3px;
+    display: block;
+}
+#send{
+    position:absolute;
+    margin:5px 0 0 -87px;
+    width:87px;
+    height:34px;
+    border-radius: 3px;
+    border:1px solid #79b235;
+    background:#79b235;
+    font-family:  "Microsoft YaHei";
+    font-size: 12px;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

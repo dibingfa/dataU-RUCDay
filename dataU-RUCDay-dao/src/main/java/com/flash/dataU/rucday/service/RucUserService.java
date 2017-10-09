@@ -1,16 +1,17 @@
 package com.flash.dataU.rucday.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.flash.dataU.rucday.entity.RucGroupDO;
 import com.flash.dataU.rucday.entity.RucUserDO;
 import com.flash.dataU.rucday.redis.RedisKeyUtil;
 import com.flash.dataU.rucday.redis.RedisOpsUtil;
 import com.flash.dataU.rucday.repository.RucUserRepository;
 import com.mysql.jdbc.StringUtils;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/9/23.
@@ -105,7 +106,7 @@ public class RucUserService {
      */
     public RucUserDO save(RucUserDO userDO) {
         // 存储到数据库
-        userDO.setCreateTime(System.currentTimeMillis());
+        userDO.setCreateTime(new Timestamp(System.currentTimeMillis()));
         userDO = rucUserRepository.save(userDO);
         // 存储redis
         String userDOStr = JSONObject.toJSONString(userDO);
@@ -114,6 +115,25 @@ public class RucUserService {
         redisOpsUtil.set(RedisKeyUtil.getFullKey(TABLE, NAME, userDO.getName()), userDOStr);
 
         return userDO;
+    }
+
+    /**
+     * 存储用户
+     */
+    public List<RucUserDO> save(List<RucUserDO> userDOS) {
+        List<RucUserDO> savedUserDOs = new ArrayList<RucUserDO>(userDOS.size());
+        for (RucUserDO userDO:userDOS) {
+            RucUserDO saved = save(userDO);
+            savedUserDOs.add(saved);
+        }
+        return savedUserDOs;
+    }
+
+    /**
+     * 清空数据库
+     */
+    public void deleteAll() {
+        rucUserRepository.deleteAll();
     }
 
 

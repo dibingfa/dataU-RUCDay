@@ -1,0 +1,150 @@
+.login{
+    padding-top: 0px; 
+    max-width: 768px;
+    margin:0 auto; 
+    min-width: 320px;
+    background: url(../images/login_bg.png) no-repeat;    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+   -moz-background-size:100% 100%;
+    background-size:100% 100%;
+    min-height:480px; 
+}
+.login-title{
+    position: relative;
+    width:100%;
+    height:80px;
+    line-height: 80px;
+    text-align: center;
+    font-size: 1.7em;
+    font-family: "Microsoft YaHei";
+    color:#fff;
+}
+.login-title i{
+    position: absolute;
+    top:130px;
+    left:50px;
+    width:230px;
+    height:20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+.login-bar{
+    position: relative;
+    width:100%;
+    height:30%;
+    
+}
+.login-bar ul li{
+    width:70%;
+    height:25px;
+    margin: 30px 0 0 11%;
+    border-bottom:1px solid #fff;
+}
+.login-bar .text{
+    position: absolute;
+    margin-left:3%;
+    width:60%;
+    height:25px;
+    border:none;
+    background:none;
+    color:#fff;
+}
+.login-bar .psd{
+    position: absolute;
+    top:55px;
+    margin-left:3%;
+    width:60%;
+    height:25px;
+    border:none;
+    background:none;
+    color:#fff;
+}
+input:focus {
+    outline:none;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #fff;  
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #fff;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #fff;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #fff;
+}
+.login-btn{
+    width:100%;
+    height:30%;
+    margin-top:80px;
+}
+.submit{
+    width:70%;
+    height:35px;
+    background:#f34541;
+    border:1px solid #f34541;
+    text-align: center;
+    margin-left:11%;
+    color:#fff;
+    font-family: "Microsoft YaHei";
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.login-reg p{
+    width:70%;
+    height:35px;
+    line-height: 35px;
+    background:#989898;
+    border:1px solid #989898;
+    text-align: center;
+    margin:25px 0 0 11%;
+    color:#fff;
+    font-family: "Microsoft YaHei";
+    font-size: 14px;
+    border-radius: 3px;
+    display: block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
