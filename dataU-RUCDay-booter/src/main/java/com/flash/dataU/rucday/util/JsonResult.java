@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * web请求响应包装类.
  *
- * @author terigele (terigele170619@credithc.com)
+ * @author flash (18811311416@sina.cn)
  * @version 0.0.1-SNAPSHOT
  * @since 2017年09月01日 10时01分
  */

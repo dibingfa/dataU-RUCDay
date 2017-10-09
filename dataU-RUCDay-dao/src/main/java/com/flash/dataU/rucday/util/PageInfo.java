@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 分页工具类.
  *
- * @author sunyiming (sunyiming170619@credithc.com)
+ * @author flash (18811311416@sina.cn)
  * @version 0.0.1-SNAPSHOT
  * @since 2017年07月25日 14时17分
  */
